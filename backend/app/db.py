@@ -1,14 +1,18 @@
 import os
+from pathlib import Path
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 
 load_dotenv()
 
-# Defaults to a local SQLite database for development; uses Postgres in production
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./kredt_dev.db")
+# Find the exact folder where backend/ is located
+BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SQLite requires check_same_thread=False for multithreaded FastAPI requests
+# Always anchor the SQLite database inside backend/
+DEFAULT_DB_PATH = BASE_DIR / "kredt_dev.db"
+DATABASE_URL = os.getenv("DATABASE_URL", f"sqlite:///{DEFAULT_DB_PATH}")
+
 connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
 
 engine = create_engine(DATABASE_URL, connect_args=connect_args)
@@ -17,7 +21,6 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
 def get_db():
-    """Dependency that yields a database session per request and cleans it up."""
     db = SessionLocal()
     try:
         yield db
