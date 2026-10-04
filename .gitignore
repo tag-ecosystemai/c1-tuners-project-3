@@ -57,7 +57,7 @@ build/
 .ipynb_checkpoints/
 
 # Data
-ai-ml backbone/risk_model/data/
+ai-ml-backbone/risk_model/data/
 
 # OS / editor
 .DS_Store
