@@ -53,5 +53,13 @@ dist/
 build/
 *.log
 
-# Uploaded files
-uploads/
+# Jupyter
+.ipynb_checkpoints/
+
+# Data
+risk_model/data/*.csv
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
