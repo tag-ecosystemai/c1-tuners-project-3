@@ -1,86 +1,98 @@
 import os
 import sys
 
-# Ensure backend package can be imported from root
+# Anchor import to backend/
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "backend")))
 
 from app.db import SessionLocal, engine, Base
 from app.models.application import ApplicationModel
 
-# Ensure tables exist
+# Ensure tables are built
 Base.metadata.create_all(bind=engine)
 
-DEMO_APPLICATIONS = [
+CONSUMER_DEMO_APPLICATIONS = [
     {
-        "application_id": "CR-DEMO-01",
+        "application_id": "CR-CONS-01",
         "status": "SUBMITTED",
         "applicant": {
-            "name": "Apex Logistics Ltd.",
-            "business_type": "Limited Liability Company",
-            "industry": "Logistics & Transport",
-            "business_age_months": 48,
-            "location": "Lagos, Nigeria"
+            "full_name": "Tunde Bakare",
+            "age": 34,
+            "gender": "Male",
+            "marital_status": "Married",
+            "employment_status": "Employed",
+            "employment_duration_months": 42,
+            "education_level": "MSc",
+            "housing_type": "Owns",
+            "location": "Lekki, Lagos"
         },
         "loan": {
-            "amount": 15000000.0,
+            "amount": 2500000.0,
             "currency": "NGN",
-            "purpose": "Fleet expansion",
-            "tenor_months": 24
-        },
-        "financials": {
-            "monthly_revenue": 12000000.0,
-            "monthly_expenses": 8000000.0,
-            "monthly_net_income": 4000000.0,
-            "existing_monthly_debt_payment": 1500000.0,
-            "total_outstanding_debt": 9000000.0
-        }
-    },
-    {
-        "application_id": "CR-DEMO-02",
-        "status": "SUBMITTED",
-        "applicant": {
-            "name": "Kano Agro Processing Co.",
-            "business_type": "Partnership",
-            "industry": "Agriculture & Processing",
-            "business_age_months": 36,
-            "location": "Kano, Nigeria"
-        },
-        "loan": {
-            "amount": 25000000.0,
-            "currency": "NGN",
-            "purpose": "Working capital",
-            "tenor_months": 12
-        },
-        "financials": {
-            "monthly_revenue": 7000000.0,
-            "monthly_expenses": 6200000.0,
-            "monthly_net_income": 800000.0,
-            "existing_monthly_debt_payment": 2500000.0,
-            "total_outstanding_debt": 18000000.0
-        }
-    },
-    {
-        "application_id": "CR-DEMO-03",
-        "status": "SUBMITTED",
-        "applicant": {
-            "name": "QuickBite Fast Foods",
-            "business_type": "Sole Proprietorship",
-            "industry": "Food & Hospitality",
-            "business_age_months": 14,
-            "location": "Abuja, Nigeria"
-        },
-        "loan": {
-            "amount": 5000000.0,
-            "currency": "NGN",
-            "purpose": "Equipment purchase",
+            "purpose": "Home Improvement",
             "tenor_months": 18
         },
         "financials": {
-            "monthly_revenue": 3500000.0,
-            "monthly_expenses": 2600000.0,
-            "monthly_net_income": 900000.0,
-            "existing_monthly_debt_payment": 500000.0,
-            "total_outstanding_debt": 2000000.0
+            "monthly_salary_income": 850000.0,
+            "additional_income": 120000.0,
+            "monthly_living_expenses": 350000.0,
+            "existing_loan_obligations": 100000.0,
+            "total_debt": 600000.0
+        }
+    },
+    {
+        "application_id": "CR-CONS-02",
+        "status": "SUBMITTED",
+        "applicant": {
+            "full_name": "Chioma Okonkwo",
+            "age": 27,
+            "gender": "Female",
+            "marital_status": "Single",
+            "employment_status": "Employed",
+            "employment_duration_months": 8,
+            "education_level": "BSc",
+            "housing_type": "Renting",
+            "location": "Ikeja, Lagos"
+        },
+        "loan": {
+            "amount": 1500000.0,
+            "currency": "NGN",
+            "purpose": "Debt Consolidation",
+            "tenor_months": 12
+        },
+        "financials": {
+            "monthly_salary_income": 280000.0,
+            "additional_income": 0.0,
+            "monthly_living_expenses": 160000.0,
+            "existing_loan_obligations": 140000.0,  # 50% DTI -> Will fail the 40% rule
+            "total_debt": 1100000.0
+        }
+    },
+    {
+        "application_id": "CR-CONS-03",
+        "status": "SUBMITTED",
+        "applicant": {
+            "full_name": "Ibrahim Danjuma",
+            "age": 45,
+            "gender": "Male",
+            "marital_status": "Married",
+            "employment_status": "Self-Employed",
+            "employment_duration_months": 60,
+            "education_level": "HND",
+            "housing_type": "Owns",
+            "location": "Wuse, Abuja"
+        },
+        "loan": {
+            "amount": 800000.0,
+            "currency": "NGN",
+            "purpose": "Medical Expenses",
+            "tenor_months": 6
+        },
+        "financials": {
+            "monthly_salary_income": 450000.0,
+            "additional_income": 50000.0,
+            "monthly_living_expenses": 250000.0,
+            "existing_loan_obligations": 80000.0,
+            "total_debt": 320000.0
         }
     }
 ]
@@ -88,7 +100,7 @@ DEMO_APPLICATIONS = [
 def seed():
     db = SessionLocal()
     try:
-        for app_data in DEMO_APPLICATIONS:
+        for app_data in CONSUMER_DEMO_APPLICATIONS:
             existing = (
                 db.query(ApplicationModel)
                 .filter(ApplicationModel.application_id == app_data["application_id"])
@@ -103,12 +115,12 @@ def seed():
                     financials=app_data["financials"]
                 )
                 db.add(record)
-                print(f"Seeded: {app_data['application_id']} ({app_data['applicant']['name']})")
+                print(f"Seeded: {app_data['application_id']} ({app_data['applicant']['full_name']})")
             else:
                 print(f"Skipped existing: {app_data['application_id']}")
 
         db.commit()
-        print("Demo data seeding completed successfully!")
+        print("Consumer demo data seeded successfully!")
     finally:
         db.close()
 
