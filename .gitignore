@@ -53,5 +53,13 @@ dist/
 build/
 *.log
 
-# Uploaded files
-uploads/
+# Jupyter
+.ipynb_checkpoints/
+
+# Data
+ai-ml-backbone/risk_model/data/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
