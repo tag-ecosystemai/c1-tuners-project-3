@@ -1,0 +1,26 @@
+{
+  "app-1001": [
+    { "id": "doc-1", "application_id": "app-1001", "document_type": "bank_statement", "file_name": "bank_statement_aug2026.pdf", "file_size": "2.1 MB", "uploaded_at": "2026-09-19T13:40:00+01:00", "status": "PROCESSED" },
+    { "id": "doc-2", "application_id": "app-1001", "document_type": "financial_statement", "file_name": "financial_statement_2025.pdf", "file_size": "1.4 MB", "uploaded_at": "2026-09-19T13:42:00+01:00", "status": "PROCESSED" },
+    { "id": "doc-3", "application_id": "app-1001", "document_type": "business_registration", "file_name": "cac_certificate.pdf", "file_size": "0.6 MB", "uploaded_at": "2026-09-19T13:45:00+01:00", "status": "PROCESSED" }
+  ],
+  "app-2201": [
+    { "id": "doc-4", "application_id": "app-2201", "document_type": "bank_statement", "file_name": "northgate_bank_stmt.pdf", "file_size": "3.0 MB", "uploaded_at": "2026-09-23T09:00:00+01:00", "status": "PROCESSED" },
+    { "id": "doc-5", "application_id": "app-2201", "document_type": "tax_document", "file_name": "tax_clearance_2025.pdf", "file_size": "0.8 MB", "uploaded_at": "2026-09-23T09:05:00+01:00", "status": "PROCESSED" }
+  ],
+  "app-2214": [
+    { "id": "doc-6", "application_id": "app-2214", "document_type": "bank_statement", "file_name": "sundew_bank_stmt_q3.pdf", "file_size": "2.7 MB", "uploaded_at": "2026-09-21T09:50:00+01:00", "status": "PROCESSED" },
+    { "id": "doc-7", "application_id": "app-2214", "document_type": "loan_schedule", "file_name": "existing_loan_schedule.pdf", "file_size": "0.5 MB", "uploaded_at": "2026-09-21T09:52:00+01:00", "status": "PROCESSED" }
+  ],
+  "app-2240": [
+    { "id": "doc-8", "application_id": "app-2240", "document_type": "bank_statement", "file_name": "palmvine_bank_stmt.pdf", "file_size": "3.4 MB", "uploaded_at": "2026-09-11T08:50:00+01:00", "status": "PROCESSED" },
+    { "id": "doc-9", "application_id": "app-2240", "document_type": "financial_statement", "file_name": "palmvine_financials_2025.pdf", "file_size": "1.9 MB", "uploaded_at": "2026-09-11T08:55:00+01:00", "status": "PROCESSED" }
+  ],
+  "app-demo-001": [
+    { "id": "doc-demo-1", "application_id": "app-demo-001", "document_type": "bank_statement", "file_name": "bank_statement.pdf", "file_size": "2.4 MB", "uploaded_at": "2026-09-05T09:10:00+01:00", "status": "PROCESSED" },
+    { "id": "doc-demo-2", "application_id": "app-demo-001", "document_type": "financial_statement", "file_name": "financial_statement.pdf", "file_size": "1.6 MB", "uploaded_at": "2026-09-05T09:12:00+01:00", "status": "PROCESSED" },
+    { "id": "doc-demo-3", "application_id": "app-demo-001", "document_type": "business_registration", "file_name": "business_registration.pdf", "file_size": "0.5 MB", "uploaded_at": "2026-09-05T09:13:00+01:00", "status": "PROCESSED" },
+    { "id": "doc-demo-4", "application_id": "app-demo-001", "document_type": "loan_schedule", "file_name": "loan_schedule.pdf", "file_size": "0.4 MB", "uploaded_at": "2026-09-05T09:14:00+01:00", "status": "PROCESSED" },
+    { "id": "doc-demo-5", "application_id": "app-demo-001", "document_type": "tax_document", "file_name": "tax_document.pdf", "file_size": "0.9 MB", "uploaded_at": "2026-09-05T09:15:00+01:00", "status": "PROCESSED" }
+  ]
+}

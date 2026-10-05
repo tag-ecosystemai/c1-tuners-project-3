@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analyst sign-in — Kredt</title>
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/pages/auth.css">
+</head>
+<body>
+<div class="auth-split">
+<aside class="auth-aside">
+  <a href="index.html" class="aside-brand"><span class="brand-mark">K</span>Kredt</a>
+  <div class="aside-body">
+    <h2>Credit Investigation Workspace</h2>
+    <p>Investigate applications, review evidence-backed reports, and record your assessment.</p>
+    <ul class="aside-points"><li><i data-icon="check" data-size="15"></i>A six-stage investigation pipeline</li><li><i data-icon="check" data-size="15"></i>Policy and risk findings, with evidence</li><li><i data-icon="check" data-size="15"></i>Every action written to the audit log</li></ul>
+  </div>
+  <div class="aside-foot">The AI investigates. The analyst decides.</div>
+</aside>
+<main class="auth-page">
+  <a href="index.html" class="auth-brand"><span class="brand-mark">K</span>Kredt</a>
+  <div class="auth-card">
+    <h1>Welcome back</h1>
+    <p class="auth-sub">Sign in to the Credit Investigation Workspace.</p>
+    <div class="auth-alert" id="auth-alert" role="alert"></div>
+    <div class="form-field">
+      <label class="form-label" for="email">Email</label>
+      <input class="input" id="email" type="email" autocomplete="email">
+      <div class="form-error">Enter your email address.</div>
+    </div>
+    <div class="form-field">
+      <label class="form-label" for="password">Password</label>
+      <input class="input" id="password" type="password" autocomplete="current-password">
+      <div class="form-error">Enter your password.</div>
+    </div>
+    <div style="display:flex; align-items:center; justify-content:space-between; margin:2px 0 6px;">
+      <label class="checkbox-row" style="align-items:center;"><input type="checkbox" id="remember" checked><span style="font-size:13.5px; color:var(--color-text-muted);">Remember me</span></label>
+      <a href="#" id="forgot-link" style="font-size:13.5px; font-weight:600; color:var(--color-teal-dark);">Forgot password?</a>
+    </div>
+    <button type="button" class="btn btn-primary btn-lg auth-submit" id="btn-login">Login</button>
+    <p class="auth-switch">Not an analyst? <a href="login.html">Borrower sign-in</a></p>
+    <div class="auth-hint">
+      <strong>Demo analyst</strong> (password <strong>demo1234</strong>)<br>
+      grace.okafor@kredt.example
+    </div>
+  </div>
+</main>
+</div>
+<script>window.SITE_ROOT = "./";</script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/auth.js"></script>
+<script>
+(function () {
+  const existing = KredtAuth.current();
+  if (existing) { window.location.replace(KredtAuth.homeFor(existing)); return; }
+  const $ = (id) => document.getElementById(id);
+  const alertEl = $('auth-alert');
+  async function submit() {
+    alertEl.classList.remove('is-visible');
+    const email = $('email').value.trim(), password = $('password').value;
+    $('email').closest('.form-field').classList.toggle('has-error', !email);
+    $('password').closest('.form-field').classList.toggle('has-error', !password);
+    if (!email || !password) return;
+    const btn = $('btn-login');
+    btn.disabled = true; btn.innerHTML = '<span class="btn-spinner"></span> Signing in...';
+    try {
+      const user = await KredtAuth.login(email, password, { expectedRole: 'analyst', remember: $('remember').checked });
+      window.location.href = KredtAuth.homeFor(user);
+    } catch (err) {
+      alertEl.textContent = err.message; alertEl.classList.add('is-visible');
+      btn.disabled = false; btn.textContent = 'Login';
+    }
+  }
+  $('forgot-link').addEventListener('click', (e) => {
+    e.preventDefault();
+    alertEl.textContent = "Analyst accounts are managed by your organisation. Contact your Kredt administrator to reset your password.";
+    alertEl.classList.add('is-visible');
+  });
+  $('btn-login').addEventListener('click', submit);
+  [$('email'), $('password')].forEach((el) => el.addEventListener('keydown', (e) => { if (e.key === 'Enter') submit(); }));
+})();
+</script>
+<script src="assets/js/ui.js"></script>
+</body>
+</html>

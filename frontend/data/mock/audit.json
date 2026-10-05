@@ -1,0 +1,39 @@
+{
+  "app-1001": [
+    { "timestamp": "2026-09-19T14:05:00+01:00", "actor": "David Chen (Borrower)", "event": "Application submitted" },
+    { "timestamp": "2026-09-19T14:06:00+01:00", "actor": "System", "event": "Application moved to Under Review" }
+  ],
+  "app-0077": [
+    { "timestamp": "2026-07-03T08:30:00+01:00", "actor": "David Chen (Borrower)", "event": "Application submitted" },
+    { "timestamp": "2026-07-03T08:35:00+01:00", "actor": "System", "event": "Application moved to Under Review" },
+    { "timestamp": "2026-07-04T11:00:00+01:00", "actor": "Grace Okafor (Analyst)", "event": "Investigation started" },
+    { "timestamp": "2026-07-04T11:01:20+01:00", "actor": "System", "event": "Investigation completed" },
+    { "timestamp": "2026-07-11T16:00:00+01:00", "actor": "Grace Okafor (Analyst)", "event": "Assessment recorded — Approved" }
+  ],
+  "app-2201": [
+    { "timestamp": "2026-09-23T09:15:00+01:00", "actor": "Northgate Logistics Ltd. (Borrower)", "event": "Application submitted" }
+  ],
+  "app-2214": [
+    { "timestamp": "2026-09-21T10:00:00+01:00", "actor": "Sundew Textiles Ltd. (Borrower)", "event": "Application submitted" },
+    { "timestamp": "2026-09-21T10:01:00+01:00", "actor": "System", "event": "Application moved to Under Review" },
+    { "timestamp": "2026-09-29T09:00:00+01:00", "actor": "Grace Okafor (Analyst)", "event": "Investigation started" }
+  ],
+  "app-2230": [
+    { "timestamp": "2026-09-16T09:30:00+01:00", "actor": "Ifeoma Balogun (Borrower)", "event": "Application submitted" },
+    { "timestamp": "2026-09-16T09:35:00+01:00", "actor": "System", "event": "Application moved to Under Review" },
+    { "timestamp": "2026-09-17T10:15:00+01:00", "actor": "Grace Okafor (Analyst)", "event": "Investigation started" },
+    { "timestamp": "2026-09-17T10:16:20+01:00", "actor": "System", "event": "Investigation completed" },
+    { "timestamp": "2026-09-18T14:00:00+01:00", "actor": "Grace Okafor (Analyst)", "event": "Assessment recorded — Additional information requested" }
+  ],
+  "app-2240": [
+    { "timestamp": "2026-09-11T09:00:00+01:00", "actor": "Palm & Vine Retail Ltd. (Borrower)", "event": "Application submitted" },
+    { "timestamp": "2026-09-11T09:05:00+01:00", "actor": "System", "event": "Application moved to Under Review" },
+    { "timestamp": "2026-09-25T10:00:00+01:00", "actor": "Grace Okafor (Analyst)", "event": "Investigation started" },
+    { "timestamp": "2026-09-25T10:01:10+01:00", "actor": "System", "event": "Investigation completed" }
+  ],
+  "app-demo-001": [
+    { "timestamp": "2026-09-05T09:20:00+01:00", "actor": "System", "event": "Demo application seeded" },
+    { "timestamp": "2026-09-05T09:20:00+01:00", "actor": "Grace Okafor (Analyst)", "event": "Investigation started" },
+    { "timestamp": "2026-09-05T09:21:09+01:00", "actor": "System", "event": "Investigation completed" }
+  ]
+}

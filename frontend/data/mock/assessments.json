@@ -1,0 +1,16 @@
+{
+  "app-0077": {
+    "application_id": "app-0077",
+    "notes": "Strong repayment capacity and clean transaction history. Approved for the requested consolidation amount.",
+    "decision": "approve",
+    "created_at": "2026-07-11T16:00:00+01:00",
+    "analyst": "Grace Okafor"
+  },
+  "app-2230": {
+    "application_id": "app-2230",
+    "notes": "Ratios are within policy, but standard income verification for self-employed applicants was not included. Requesting the missing documents before proceeding.",
+    "decision": "request_info",
+    "created_at": "2026-09-18T14:00:00+01:00",
+    "analyst": "Grace Okafor"
+  }
+}

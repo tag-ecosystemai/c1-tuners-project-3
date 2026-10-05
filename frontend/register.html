@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create account — Kredt</title>
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/pages/auth.css">
+</head>
+<body>
+<div class="auth-split">
+<aside class="auth-aside">
+  <a href="index.html" class="aside-brand"><span class="brand-mark">K</span>Kredt</a>
+  <div class="aside-body">
+    <h2>Credit decisions you can follow.</h2>
+    <p>Apply once, upload your documents, and see exactly where your application stands.</p>
+    <ul class="aside-points"><li><i data-icon="check" data-size="15"></i>Save a draft and return any time</li><li><i data-icon="check" data-size="15"></i>Follow each step through to a decision</li><li><i data-icon="check" data-size="15"></i>Upload your documents securely</li></ul>
+  </div>
+  <div class="aside-foot">The AI investigates. The analyst decides.</div>
+</aside>
+<main class="auth-page">
+  <a href="index.html" class="auth-brand"><span class="brand-mark">K</span>Kredt</a>
+  <div class="auth-card">
+    <h1>Create your account</h1>
+    <p class="auth-sub">Apply for credit and track your application. You'll verify your details next.</p>
+    <div class="auth-alert" id="auth-alert" role="alert"></div>
+    <div class="profile-grid">
+      <div class="form-field">
+        <label class="form-label" for="first-name">First name</label>
+        <input class="input" id="first-name" autocomplete="given-name">
+        <div class="form-error">Enter your first name.</div>
+      </div>
+      <div class="form-field">
+        <label class="form-label" for="last-name">Last name</label>
+        <input class="input" id="last-name" autocomplete="family-name">
+        <div class="form-error">Enter your last name.</div>
+      </div>
+    </div>
+    <div class="form-field">
+      <label class="form-label" for="email">Email</label>
+      <input class="input" id="email" type="email" autocomplete="email">
+      <div class="form-error" id="email-error">Enter a valid email address.</div>
+    </div>
+    <div class="form-field">
+      <label class="form-label" for="password">Password</label>
+      <input class="input" id="password" type="password" autocomplete="new-password">
+      <div class="form-error">Use at least 8 characters.</div>
+    </div>
+    <div class="form-field">
+      <label class="form-label" for="confirm">Confirm password</label>
+      <input class="input" id="confirm" type="password" autocomplete="new-password">
+      <div class="form-error">Passwords don't match.</div>
+    </div>
+    <button type="button" class="btn btn-primary btn-lg auth-submit" id="btn-register">Create account</button>
+    <p class="auth-switch">Already have an account? <a href="login.html">Login</a></p>
+  </div>
+</main>
+</div>
+<script>window.SITE_ROOT = "./";</script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/auth.js"></script>
+<script>
+(function () {
+  const existing = KredtAuth.current();
+  if (existing) { window.location.replace(KredtAuth.homeFor(existing)); return; }
+  const $ = (id) => document.getElementById(id);
+  const alertEl = $('auth-alert');
+  const flag = (id, bad) => $(id).closest('.form-field').classList.toggle('has-error', bad);
+  // Account created and already signed in — confirm it, then move on to the profile step.
+  function showSuccess(user) {
+    const next = KredtAuth.homeFor(user);
+    document.querySelector('.auth-card').innerHTML = `
+      <div class="success-state">
+        <div class="success-check"><svg viewBox="0 0 52 52" width="52" height="52" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle class="sc-ring" cx="26" cy="26" r="23"/><path class="sc-tick" d="M15 27l8 8 14-16"/></svg></div>
+        <h1>Account created successfully</h1>
+        <p class="auth-sub">Welcome, ${KredtUI.escapeHtml(user.first_name)}. You're signed in. Next, set up your borrower profile so we can verify your details.</p>
+        <ul class="success-steps">
+          <li class="is-done"><span></span>Create account</li>
+          <li class="is-now"><span></span>Complete profile</li>
+          <li><span></span>Start applying</li>
+        </ul>
+        <a href="${next}" class="btn btn-primary btn-lg auth-submit" id="btn-next">Continue to profile</a>
+        <p class="success-note" id="redirect-note">Taking you there in a moment...</p>
+      </div>`;
+    setTimeout(() => { window.location.href = next; }, 2600);
+  }
+
+  $('btn-register').addEventListener('click', async () => {
+    alertEl.classList.remove('is-visible');
+    const first = $('first-name').value.trim(), last = $('last-name').value.trim(), email = $('email').value.trim(), pw = $('password').value, confirm = $('confirm').value;
+    const bad = { first: !first, last: !last, email: !/^\S+@\S+\.\S+$/.test(email), pw: pw.length < 8, confirm: confirm !== pw };
+    flag('first-name', bad.first); flag('last-name', bad.last); flag('email', bad.email); flag('password', bad.pw); flag('confirm', bad.confirm);
+    $('email-error').textContent = 'Enter a valid email address.';
+    if (Object.values(bad).some(Boolean)) return;
+    const btn = $('btn-register');
+    btn.disabled = true; btn.innerHTML = '<span class="btn-spinner"></span> Creating account...';
+    try {
+      const user = await KredtAuth.register({ first_name: first, last_name: last, email, password: pw });
+      showSuccess(user);
+    } catch (err) {
+      if (err.field === 'email') { $('email-error').textContent = err.message; flag('email', true); }
+      else { alertEl.textContent = err.message; alertEl.classList.add('is-visible'); }
+      btn.disabled = false; btn.textContent = 'Create account';
+    }
+  });
+})();
+</script>
+<script src="assets/js/ui.js"></script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign in — Kredt</title>
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/pages/auth.css">
+</head>
+<body>
+<div class="auth-split">
+<aside class="auth-aside">
+  <a href="index.html" class="aside-brand"><span class="brand-mark">K</span>Kredt</a>
+  <div class="aside-body">
+    <h2>Credit decisions you can follow.</h2>
+    <p>Apply once, upload your documents, and see exactly where your application stands.</p>
+    <ul class="aside-points"><li><i data-icon="check" data-size="15"></i>Save a draft and return any time</li><li><i data-icon="check" data-size="15"></i>Follow each step through to a decision</li><li><i data-icon="check" data-size="15"></i>Upload your documents securely</li></ul>
+  </div>
+  <div class="aside-foot">The AI investigates. The analyst decides.</div>
+</aside>
+<main class="auth-page">
+  <a href="index.html" class="auth-brand"><span class="brand-mark">K</span>Kredt</a>
+  <div class="auth-card">
+    <h1>Welcome back</h1>
+    <p class="auth-sub">Sign in to your account.</p>
+    <div class="auth-alert" id="auth-alert" role="alert"></div>
+    <div class="form-field">
+      <label class="form-label" for="email">Email</label>
+      <input class="input" id="email" type="email" autocomplete="email">
+      <div class="form-error">Enter your email address.</div>
+    </div>
+    <div class="form-field">
+      <label class="form-label" for="password">Password</label>
+      <input class="input" id="password" type="password" autocomplete="current-password">
+      <div class="form-error">Enter your password.</div>
+    </div>
+    <button type="button" class="btn btn-primary btn-lg auth-submit" id="btn-login">Sign in</button>
+    <p class="auth-switch">Don't have an account? <a href="register.html">Register</a></p>
+    <p class="auth-switch" style="margin-top:8px;">Credit analyst? <a href="analyst-login.html">Analyst sign-in</a></p>
+    <div class="auth-hint">
+      <strong>Demo borrower</strong> (password <strong>demo1234</strong>)<br>
+      david.chen@example.com
+    </div>
+  </div>
+</main>
+</div>
+<script>window.SITE_ROOT = "./";</script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/auth.js"></script>
+<script>
+(function () {
+  const existing = KredtAuth.current();
+  if (existing) { window.location.replace(KredtAuth.homeFor(existing)); return; }
+  const $ = (id) => document.getElementById(id);
+  const alertEl = $('auth-alert');
+  async function submit() {
+    alertEl.classList.remove('is-visible');
+    const email = $('email').value.trim(), password = $('password').value;
+    $('email').closest('.form-field').classList.toggle('has-error', !email);
+    $('password').closest('.form-field').classList.toggle('has-error', !password);
+    if (!email || !password) return;
+    const btn = $('btn-login');
+    btn.disabled = true; btn.innerHTML = '<span class="btn-spinner"></span> Signing in...';
+    try {
+      const user = await KredtAuth.login(email, password, { expectedRole: 'borrower' });
+      window.location.href = KredtAuth.homeFor(user);
+    } catch (err) {
+      alertEl.textContent = err.message; alertEl.classList.add('is-visible');
+      btn.disabled = false; btn.textContent = 'Sign in';
+    }
+  }
+  $('btn-login').addEventListener('click', submit);
+  [$('email'), $('password')].forEach((el) => el.addEventListener('keydown', (e) => { if (e.key === 'Enter') submit(); }));
+})();
+</script>
+<script src="assets/js/ui.js"></script>
+</body>
+</html>

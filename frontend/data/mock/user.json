@@ -1,0 +1,14 @@
+{
+  "borrower": {
+    "id": "user-borrower-1",
+    "name": "David Chen",
+    "email": "david.chen@example.com",
+    "role": "borrower"
+  },
+  "analyst": {
+    "id": "user-analyst-1",
+    "name": "Grace Okafor",
+    "email": "grace.okafor@kredt.example",
+    "role": "analyst"
+  }
+}

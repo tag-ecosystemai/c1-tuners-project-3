@@ -1,0 +1,32 @@
+<div class="topbar-left">
+  <a href="{{ROOT}}app/borrower/applications.html" class="topbar-brand">
+    <span class="brand-mark">K</span>
+    Kredt
+  </a>
+  <nav class="borrower-nav" aria-label="Main">
+    <a href="{{ROOT}}app/borrower/applications.html" data-page="borrower-applications">My Applications</a>
+    <a href="#" data-profile-link data-page="borrower-profile">Profile</a>
+  </nav>
+</div>
+<div class="topbar-actions">
+  <button class="topbar-icon-btn" id="notif-toggle" aria-label="Notifications">
+    <i data-icon="bell" data-size="18"></i><span id="notif-badge" class="notif-badge"></span>
+  </button>
+  <div class="topbar-user" id="user-menu-toggle">
+    <span class="sidebar-user-avatar" id="topbar-avatar" style="width:30px; height:30px; font-size:12px;"></span>
+    <span class="topbar-user-name" id="topbar-user-name"></span>
+    <span class="topbar-chev"><i data-icon="chevron" data-size="14"></i></span>
+  </div>
+  <div class="topbar-user-dropdown" id="user-menu-dropdown">
+    <div class="dropdown-meta">
+      <span class="name" id="dropdown-name"></span>
+      <span class="email" id="dropdown-email"></span>
+    </div>
+    <a href="#" data-profile-link>Profile</a>
+    <a href="#" data-logout>Log out</a>
+  </div>
+</div>
+<nav class="bottom-nav" aria-label="Mobile">
+  <a href="{{ROOT}}app/borrower/applications.html" data-page="borrower-applications"><i class="icon" data-icon="inbox" data-size="20"></i>Applications</a>
+  <a href="#" data-profile-link data-page="borrower-profile"><i class="icon" data-icon="user" data-size="20"></i>Profile</a>
+</nav>

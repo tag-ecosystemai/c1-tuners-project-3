@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — Kredt</title>
+<script>window.SITE_ROOT = '../../';</script>
+<link rel="stylesheet" href="../../assets/css/base.css">
+<link rel="stylesheet" href="../../assets/css/components.css">
+<link rel="stylesheet" href="../../assets/css/app-shell.css">
+<link rel="stylesheet" href="../../assets/css/pages/analyst.css">
+</head>
+<body data-page="analyst-dashboard" data-portal="analyst" data-title="Dashboard">
+
+<div class="app-shell">
+  <div data-include="sidebar-analyst"></div>
+  <div class="shell-main">
+    <header class="topbar" data-include="topbar"></header>
+    <main class="page-content page-content-wide">
+      <div class="page-header">
+        <div class="page-header-row">
+          <div>
+            <h1 id="greeting-title">Dashboard</h1>
+            <p id="greeting-line">Here's what's happening across your applications.</p>
+          </div>
+          <a href="queue.html" class="btn btn-primary">View all applications</a>
+        </div>
+      </div>
+
+      <div class="summary-cards" id="summary-cards">
+        <div class="skeleton" style="height:112px;"></div>
+        <div class="skeleton" style="height:112px;"></div>
+        <div class="skeleton" style="height:112px;"></div>
+        <div class="skeleton" style="height:112px;"></div>
+      </div>
+
+      <div class="dash-grid dash-grid-a">
+        <div class="card card-pad">
+          <div class="card-header"><div><h3>Applications by status</h3><p class="card-sub">Where every application sits right now</p></div></div>
+          <div id="chart-status"><div class="skeleton" style="height:180px;"></div></div>
+        </div>
+        <div class="card card-pad">
+          <div class="card-header"><div><h3>Applications received</h3><p class="card-sub">New applications per month, last six months</p></div></div>
+          <div id="chart-monthly"><div class="skeleton" style="height:220px;"></div></div>
+        </div>
+      </div>
+
+      <div class="dash-grid dash-grid-b">
+        <div class="card card-pad">
+          <div class="card-header"><div><h3>Requested amounts</h3><p class="card-sub" id="hist-sub">How large the requests are</p></div></div>
+          <div id="chart-amounts"><div class="skeleton" style="height:220px;"></div></div>
+        </div>
+        <div class="card card-pad">
+          <div class="card-header"><div><h3>Needs your attention</h3><p class="card-sub">Oldest first</p></div></div>
+          <div id="attention-region"><div class="skeleton skeleton-row"></div><div class="skeleton skeleton-row"></div></div>
+        </div>
+      </div>
+
+      <div class="card card-pad">
+        <div class="card-header">
+          <div><h3>Recent applications</h3><p class="card-sub">The latest six to arrive</p></div>
+          <a href="queue.html" class="btn btn-secondary btn-sm">Open queue</a>
+        </div>
+        <div id="recent-region">
+          <div class="skeleton skeleton-row"></div>
+          <div class="skeleton skeleton-row"></div>
+          <div class="skeleton skeleton-row"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="../../assets/js/config.js"></script>
+<script src="../../assets/js/auth.js"></script>
+<script src="../../assets/js/store.js"></script>
+<script src="../../assets/js/api.js"></script>
+<script src="../../assets/js/ui.js"></script>
+<script src="../../assets/js/charts.js"></script>
+<script src="../../assets/js/include.js"></script>
+<script src="../../assets/js/pages/analyst-dashboard.js"></script>
+</body>
+</html>

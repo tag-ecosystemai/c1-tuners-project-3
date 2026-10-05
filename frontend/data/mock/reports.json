@@ -1,0 +1,110 @@
+{
+  "job-0077-a": {
+    "id": "report-0077-a",
+    "investigation_job_id": "job-0077-a",
+    "application_id": "app-0077",
+    "generated_at": "2026-07-04T11:01:10+01:00",
+    "summary": "David Chen shows strong repayment capacity relative to the requested consolidation amount, with a comfortable debt service coverage ratio and low existing debt burden. All reviewed policy criteria are satisfied and no concerns were identified.",
+    "financial_ratios": [
+      { "name": "Net Profit Margin", "value": "56.9%", "policy_threshold": "15% min", "flag": "within_policy" },
+      { "name": "Debt-to-Revenue", "value": "0.09", "policy_threshold": "0.50 max", "flag": "within_policy" },
+      { "name": "DSCR", "value": "6.61x", "policy_threshold": "1.25x min", "flag": "within_policy" },
+      { "name": "Loan-to-Annual-Revenue", "value": "0.103", "policy_threshold": "0.30 max", "flag": "within_policy" }
+    ],
+    "policy_findings": [
+      { "clause_ref": "Individual Lending Policy §2.1", "clause_text_excerpt": "Minimum DSCR requirement is 1.25x for all lending facilities.", "relevance": "Applicant's calculated DSCR is 6.61x, comfortably above the minimum threshold.", "applies_to": "Repayment capacity", "result": "PASS" }
+    ],
+    "transaction_findings": [],
+    "risk_prediction": {
+      "score": 0.04,
+      "band": "low",
+      "model_version": "credit-risk-v1",
+      "prediction_horizon": "12_months",
+      "inputs_used": ["annual_income", "loan_amount", "existing_debt", "debt_to_income", "dscr", "loan_to_income", "previous_defaults"]
+    },
+    "missing_information": []
+  },
+
+  "job-2230-a": {
+    "id": "report-2230-a",
+    "investigation_job_id": "job-2230-a",
+    "application_id": "app-2230",
+    "generated_at": "2026-09-17T10:16:20+01:00",
+    "summary": "Ifeoma Balogun's calculated financial ratios are within policy, indicating adequate repayment capacity for the requested facility. However, as a self-employed applicant, standard income verification documents were not included with the submission and are required before the assessment can proceed further.",
+    "financial_ratios": [
+      { "name": "Net Profit Margin", "value": "55.6%", "policy_threshold": "15% min", "flag": "within_policy" },
+      { "name": "Debt-to-Revenue", "value": "0.09", "policy_threshold": "0.50 max", "flag": "within_policy" },
+      { "name": "DSCR", "value": "6.25x", "policy_threshold": "1.25x min", "flag": "within_policy" },
+      { "name": "Loan-to-Annual-Revenue", "value": "0.231", "policy_threshold": "0.30 max", "flag": "within_policy" }
+    ],
+    "policy_findings": [
+      { "clause_ref": "Individual Lending Policy §2.1", "clause_text_excerpt": "Minimum DSCR requirement is 1.25x for all lending facilities.", "relevance": "Applicant's calculated DSCR is 6.25x, comfortably above the minimum threshold.", "applies_to": "Repayment capacity", "result": "PASS" },
+      { "clause_ref": "Individual Lending Policy §2.4", "clause_text_excerpt": "Self-employed applicants must provide 6 months of income verification.", "relevance": "No income verification documents were found among the submitted documents.", "applies_to": "Documentation completeness", "result": "REQUIRES_REVIEW" }
+    ],
+    "transaction_findings": [],
+    "risk_prediction": {
+      "score": 0.09,
+      "band": "low",
+      "model_version": "credit-risk-v1",
+      "prediction_horizon": "12_months",
+      "inputs_used": ["annual_income", "loan_amount", "existing_debt", "debt_to_income", "dscr", "loan_to_income", "previous_defaults"]
+    },
+    "missing_information": ["Proof of self-employment income for the last 6 months", "Updated bank statement covering the most recent 3 months"]
+  },
+
+  "job-2240-a": {
+    "id": "report-2240-a",
+    "investigation_job_id": "job-2240-a",
+    "application_id": "app-2240",
+    "generated_at": "2026-09-25T10:01:10+01:00",
+    "summary": "Palm & Vine Retail Ltd. shows stable revenue growth and comfortable repayment capacity for the requested facility. All reviewed policy criteria are satisfied and no unusual transaction activity was identified. Risk prediction places the applicant in the low band.",
+    "financial_ratios": [
+      { "name": "Net Profit Margin", "value": "22.3%", "policy_threshold": "15% min", "flag": "within_policy" },
+      { "name": "Debt-to-Revenue", "value": "0.31", "policy_threshold": "0.50 max", "flag": "within_policy" },
+      { "name": "DSCR", "value": "1.61x", "policy_threshold": "1.25x min", "flag": "within_policy" },
+      { "name": "Loan-to-Annual-Revenue", "value": "0.149", "policy_threshold": "0.30 max", "flag": "within_policy" }
+    ],
+    "policy_findings": [
+      { "clause_ref": "Commercial Lending Policy §4.2", "clause_text_excerpt": "Minimum DSCR requirement is 1.25x for all commercial lending facilities.", "relevance": "Applicant's calculated DSCR is 1.61x, comfortably above the minimum threshold.", "applies_to": "Repayment capacity", "result": "PASS" },
+      { "clause_ref": "SME Lending Policy §3.1", "clause_text_excerpt": "Minimum business age of 24 months required for SME lending eligibility.", "relevance": "Applicant has been operating for 63 months, satisfying this requirement.", "applies_to": "Eligibility", "result": "PASS" }
+    ],
+    "transaction_findings": [],
+    "risk_prediction": {
+      "score": 0.07,
+      "band": "low",
+      "model_version": "credit-risk-v1",
+      "prediction_horizon": "12_months",
+      "inputs_used": ["annual_revenue", "loan_amount", "business_age_months", "existing_debt", "debt_to_revenue", "dscr", "loan_to_revenue", "previous_defaults", "average_monthly_balance"]
+    },
+    "missing_information": ["Updated tax clearance certificate for FY2026"]
+  },
+
+  "job-demo-001": {
+    "id": "report-demo-001",
+    "investigation_job_id": "job-demo-001",
+    "application_id": "app-demo-001",
+    "generated_at": "2026-09-05T09:21:09+01:00",
+    "summary": "ABC Manufacturing Ltd. meets the minimum business-age requirement and shows a healthy net profit margin, but its debt service coverage ratio falls well below the bank's minimum threshold, indicating limited capacity to absorb the additional requested facility on top of existing obligations. A single large inflow on the applicant's bank statement was flagged for manual review. Risk prediction places the applicant in the medium band.",
+    "financial_ratios": [
+      { "name": "Net Profit Margin", "value": "20.0%", "policy_threshold": "15% min", "flag": "within_policy" },
+      { "name": "Debt-to-Revenue", "value": "0.40", "policy_threshold": "0.50 max", "flag": "within_policy" },
+      { "name": "DSCR", "value": "0.50x", "policy_threshold": "1.25x min", "flag": "breach" },
+      { "name": "Loan-to-Annual-Revenue", "value": "0.167", "policy_threshold": "0.30 max", "flag": "within_policy" }
+    ],
+    "policy_findings": [
+      { "clause_ref": "Commercial Lending Policy §4.2", "clause_text_excerpt": "Minimum DSCR requirement is 1.25x for all commercial lending facilities.", "relevance": "Applicant's calculated DSCR is 0.50x, below the minimum threshold.", "applies_to": "Repayment capacity", "result": "FAIL" },
+      { "clause_ref": "SME Lending Policy §3.1", "clause_text_excerpt": "Minimum business age of 24 months required for SME lending eligibility.", "relevance": "Applicant has been operating for 32 months, satisfying this requirement.", "applies_to": "Eligibility", "result": "PASS" }
+    ],
+    "transaction_findings": [
+      { "type": "anomaly", "description": "A transfer of ₦4,500,000 received on 12 Aug 2026 significantly exceeds the applicant's typical inflow amount and does not match a recognizable recurring pattern.", "evidence_ref": "TXN-002" }
+    ],
+    "risk_prediction": {
+      "score": 0.18,
+      "band": "medium",
+      "model_version": "credit-risk-v1",
+      "prediction_horizon": "12_months",
+      "inputs_used": ["annual_revenue", "loan_amount", "business_age_months", "existing_debt", "debt_to_revenue", "dscr", "loan_to_revenue", "previous_defaults", "average_monthly_balance"]
+    },
+    "missing_information": []
+  }
+}

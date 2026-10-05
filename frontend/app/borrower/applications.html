@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Applications — Kredt</title>
+<script>window.SITE_ROOT = '../../';</script>
+<link rel="stylesheet" href="../../assets/css/base.css">
+<link rel="stylesheet" href="../../assets/css/components.css">
+<link rel="stylesheet" href="../../assets/css/app-shell.css">
+<link rel="stylesheet" href="../../assets/css/pages/borrower.css">
+</head>
+<body data-page="borrower-applications" data-portal="borrower" data-title="My Applications">
+<div class="app-shell">
+  <div class="shell-main">
+    <header class="topbar borrower-topbar" data-include="topnav-borrower"></header>
+    <main class="page-content">
+      <div class="page-header welcome-block">
+        <div class="page-header-row">
+          <div>
+            <h1 id="welcome-title">My Applications</h1>
+            <p id="welcome-line">Manage your applications and track your credit requests.</p>
+          </div>
+          <a href="applications/new.html" class="btn btn-accent" id="start-new-btn"></a>
+        </div>
+      </div>
+      <div class="stat-row" id="stat-row"></div>
+      <div class="section-title" id="apps-title" hidden>Your applications</div>
+      <div id="applications-region">
+        <div class="applications-grid">
+          <div class="skeleton skeleton-row" style="height:150px;"></div>
+          <div class="skeleton skeleton-row" style="height:150px;"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+<script src="../../assets/js/config.js"></script>
+<script src="../../assets/js/auth.js"></script>
+<script src="../../assets/js/store.js"></script>
+<script src="../../assets/js/api.js"></script>
+<script src="../../assets/js/ui.js"></script>
+<script src="../../assets/js/include.js"></script>
+<script src="../../assets/js/pages/borrower-applications.js"></script>
+</body></html>

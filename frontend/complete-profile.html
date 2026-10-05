@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Complete your profile — Kredt</title>
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/pages/auth.css">
+</head>
+<body>
+<div class="auth-split">
+<aside class="auth-aside">
+  <a href="index.html" class="aside-brand"><span class="brand-mark">K</span>Kredt</a>
+  <div class="aside-body">
+    <h2>Credit decisions you can follow.</h2>
+    <p>Apply once, upload your documents, and see exactly where your application stands.</p>
+    <ul class="aside-points"><li><i data-icon="check" data-size="15"></i>Save a draft and return any time</li><li><i data-icon="check" data-size="15"></i>Follow each step through to a decision</li><li><i data-icon="check" data-size="15"></i>Upload your documents securely</li></ul>
+  </div>
+  <div class="aside-foot">The AI investigates. The analyst decides.</div>
+</aside>
+<main class="auth-page">
+  <a href="index.html" class="auth-brand"><span class="brand-mark">K</span>Kredt</a>
+  <div class="auth-card auth-card-wide">
+    <h1 id="cp-title">Complete your profile</h1>
+    <p class="auth-sub" id="cp-sub">Before you continue, we need a few details to set up and verify your borrower profile.</p>
+    <div class="auth-alert" id="auth-alert" role="alert"></div>
+
+    <div class="profile-section-title">Personal information</div>
+    <div class="profile-grid">
+      <div class="form-field">
+        <label class="form-label" for="first-name">First name</label>
+        <input class="input" id="first-name" autocomplete="given-name">
+        <div class="form-error">Enter your first name.</div>
+      </div>
+      <div class="form-field">
+        <label class="form-label" for="last-name">Last name</label>
+        <input class="input" id="last-name" autocomplete="family-name">
+        <div class="form-error">Enter your last name.</div>
+      </div>
+    </div>
+    <div class="form-field">
+      <label class="form-label" for="phone">Phone number</label>
+      <input class="input" id="phone" inputmode="tel" placeholder="0803 123 4567" autocomplete="tel">
+      <div class="form-error">Enter a valid Nigerian phone number.</div>
+      <div class="field-check"><span class="tick">✓</span>Phone number verified</div>
+    </div>
+    <div class="profile-section-title">Identity verification</div>
+    <div class="profile-grid">
+      <div class="form-field">
+        <label class="form-label" for="nin">NIN</label>
+        <input class="input" id="nin" inputmode="numeric" maxlength="11" placeholder="11 digits" autocomplete="off">
+        <div class="form-error">NIN is 11 digits.</div>
+        <div class="field-check"><span class="tick">✓</span>NIN validated</div>
+      </div>
+      <div class="form-field">
+        <label class="form-label" for="bvn">BVN</label>
+        <input class="input" id="bvn" inputmode="numeric" maxlength="11" placeholder="11 digits" autocomplete="off">
+        <div class="form-error">BVN is 11 digits.</div>
+        <div class="field-check"><span class="tick">✓</span>BVN validated</div>
+      </div>
+    </div>
+
+    <div class="profile-section-title">Account information</div>
+    <div class="profile-grid">
+      <div class="form-field">
+        <label class="form-label" for="bank">Bank</label>
+        <select class="input" id="bank"><option value="">Select bank</option></select>
+        <div class="form-error">Choose your bank.</div>
+      </div>
+      <div class="form-field">
+        <label class="form-label" for="account">Account number</label>
+        <input class="input" id="account" inputmode="numeric" maxlength="10" placeholder="10 digits" autocomplete="off">
+        <div class="form-error">Account number is 10 digits.</div>
+        <div class="field-check"><span class="tick">✓</span>Account number validated</div>
+      </div>
+    </div>
+    <div class="form-field">
+      <label class="form-label" for="account-name">Account name</label>
+      <input class="input" id="account-name" autocomplete="off" placeholder="Name on the account">
+      <div class="form-error">Enter the name on the account.</div>
+    </div>
+
+    <button type="button" class="btn btn-primary btn-lg auth-submit" id="btn-continue" disabled style="margin-top:22px;">Save &amp; Continue</button>
+  </div>
+</main>
+</div>
+<script>window.SITE_ROOT = './';</script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/auth.js"></script>
+<script>
+(function () {
+  const me = KredtAuth.current();
+  if (!me) { window.location.replace('login.html'); return; }
+  // Analyst accounts are provisioned by the organisation — no profile onboarding.
+  if (me.role !== 'borrower') { window.location.replace(KredtAuth.homeFor(me)); return; }
+  // Signing in lands here too (treated like a new user), so only an explicit
+  // "Update details" visit gets the editing copy.
+  const editing = me.profile_complete && !KredtAuth.profilePending();
+  if (editing) {
+    document.getElementById('cp-title').textContent = 'Update your details';
+    document.getElementById('cp-sub').textContent = 'For your security, re-enter your NIN, BVN and account number.';
+  }
+  const $ = (id) => document.getElementById(id);
+  KredtAuth.BANKS.forEach((b) => { const o = document.createElement('option'); o.textContent = b; o.value = b; $('bank').appendChild(o); });
+  $('first-name').value = me.first_name || '';
+  $('last-name').value = me.last_name || '';
+  if (editing) { $('phone').value = me.profile.phone || ''; $('bank').value = me.profile.bank || ''; $('account-name').value = me.profile.account_name || ''; }
+
+  const V = KredtAuth.validators;
+  const rules = { 'first-name': () => V.name($('first-name').value), 'last-name': () => V.name($('last-name').value), 'account-name': () => V.name($('account-name').value), phone: () => V.phone($('phone').value), nin: () => V.nin($('nin').value.trim()), bvn: () => V.bvn($('bvn').value.trim()), bank: () => !!$('bank').value, account: () => V.account($('account').value.trim()) };
+  const state = () => ({
+    first: rules['first-name'](), last: rules['last-name'](),
+    phone: rules.phone(), nin: rules.nin(), bvn: rules.bvn(),
+    account: rules.bank() && rules.account() && rules['account-name'](),
+  });
+
+  // Each of these four fields gets its own inline "✓ verified" line right
+  // below it, shown the moment that field's own format is valid — not one
+  // combined checklist at the end of the form.
+  const FIELD_CHECKS = ['phone', 'nin', 'bvn', 'account'];
+
+  function refresh() {
+    const s = state();
+    FIELD_CHECKS.forEach((id) => $(id).closest('.form-field').classList.toggle('is-verified', rules[id]()));
+    $('btn-continue').disabled = !Object.values(s).every(Boolean);
+  }
+  ['first-name', 'last-name', 'phone', 'nin', 'bvn', 'bank', 'account', 'account-name'].forEach((id) => $(id).addEventListener('input', refresh));
+  ['nin', 'bvn', 'account'].forEach((id) => $(id).addEventListener('input', (e) => { e.target.value = e.target.value.replace(/\D/g, ''); }));
+
+  // Show the specific error only after a field has been left.
+  Object.keys(rules).forEach((id) => $(id).addEventListener('blur', () => { if ($(id).value) $(id).closest('.form-field').classList.toggle('has-error', !rules[id]()); }));
+  Object.keys(rules).forEach((id) => $(id).addEventListener('input', () => { if (rules[id]()) $(id).closest('.form-field').classList.remove('has-error'); }));
+
+  $('btn-continue').addEventListener('click', async () => {
+    const btn = $('btn-continue');
+    btn.disabled = true; btn.innerHTML = '<span class="btn-spinner"></span> Verifying...';
+    try {
+      const user = await KredtAuth.completeProfile({ first_name: $('first-name').value.trim(), last_name: $('last-name').value.trim(), account_name: $('account-name').value.trim(), phone: $('phone').value.replace(/\s/g, ''), nin: $('nin').value.trim(), bvn: $('bvn').value.trim(), bank: $('bank').value, account_number: $('account').value.trim() });
+      window.location.href = KredtAuth.homeFor(user);
+    } catch (err) {
+      const a = $('auth-alert'); a.textContent = err.message; a.classList.add('is-visible');
+      btn.disabled = false; btn.innerHTML = 'Save &amp; Continue';
+    }
+  });
+  refresh();
+})();
+</script>
+<script src="assets/js/ui.js"></script>
+</body>
+</html>

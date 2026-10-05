@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Applications — Kredt</title>
+<script>window.SITE_ROOT = '../../';</script>
+<link rel="stylesheet" href="../../assets/css/base.css">
+<link rel="stylesheet" href="../../assets/css/components.css">
+<link rel="stylesheet" href="../../assets/css/app-shell.css">
+<link rel="stylesheet" href="../../assets/css/pages/analyst.css">
+</head>
+<body data-page="analyst-queue" data-portal="analyst" data-title="Applications">
+
+<div class="app-shell">
+  <div data-include="sidebar-analyst"></div>
+  <div class="shell-main">
+    <header class="topbar" data-include="topbar"></header>
+    <main class="page-content page-content-wide">
+      <div class="page-header">
+        <h1>Applications</h1>
+        <p>Review and investigate loan applications.</p>
+      </div>
+
+      <div class="card filters-bar">
+        <div class="filter-field">
+          <label for="f-status">Status</label>
+          <select class="input" id="f-status">
+            <option value="all">All Statuses</option>
+            <option value="submitted">Submitted</option>
+            <option value="under_review">Under Review</option>
+            <option value="investigation_in_progress">Investigation in Progress</option>
+            <option value="investigation_complete">Investigation Complete</option>
+            <option value="additional_info_requested">Additional Information Requested</option>
+            <option value="decided">Decided</option>
+          </select>
+        </div>
+        <div class="filter-field">
+          <label for="f-type">Loan Type</label>
+          <select class="input" id="f-type">
+            <option value="all">All</option>
+            <option value="business">Business</option>
+            <option value="individual">Individual</option>
+          </select>
+        </div>
+        <div class="filter-field">
+          <label for="f-demo">Demo</label>
+          <select class="input" id="f-demo">
+            <option value="all">All</option>
+            <option value="demo">Demo</option>
+            <option value="real">Real Applications</option>
+          </select>
+        </div>
+        <div class="filter-field">
+          <label for="f-from">From</label>
+          <input type="date" class="input" id="f-from">
+        </div>
+        <div class="filter-field">
+          <label for="f-to">To</label>
+          <input type="date" class="input" id="f-to">
+        </div>
+        <div class="filter-field search-field">
+          <label for="f-search">Search</label>
+          <input type="text" class="input" id="f-search" placeholder="Search by reference or applicant...">
+        </div>
+      </div>
+
+      <div class="card card-pad" id="table-region">
+        <div class="skeleton skeleton-row"></div>
+        <div class="skeleton skeleton-row"></div>
+        <div class="skeleton skeleton-row"></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="../../assets/js/config.js"></script>
+<script src="../../assets/js/auth.js"></script>
+<script src="../../assets/js/store.js"></script>
+<script src="../../assets/js/api.js"></script>
+<script src="../../assets/js/ui.js"></script>
+<script src="../../assets/js/include.js"></script>
+<script src="../../assets/js/pages/analyst-queue.js"></script>
+</body>
+</html>

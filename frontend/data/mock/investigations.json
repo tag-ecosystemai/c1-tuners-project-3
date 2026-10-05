@@ -1,0 +1,97 @@
+{
+  "app-0077": [
+    {
+      "id": "job-0077-a",
+      "application_id": "app-0077",
+      "status": "complete",
+      "current_stage": "done",
+      "stages": [
+        { "name": "validation", "label": "Validation", "status": "complete", "started_at": "2026-07-04T11:00:00+01:00", "finished_at": "2026-07-04T11:00:07+01:00" },
+        { "name": "policy_retrieval", "label": "Policy Retrieval", "status": "complete", "started_at": "2026-07-04T11:00:07+01:00", "finished_at": "2026-07-04T11:00:18+01:00" },
+        { "name": "financial_analysis", "label": "Financial Analysis", "status": "complete", "started_at": "2026-07-04T11:00:18+01:00", "finished_at": "2026-07-04T11:00:29+01:00" },
+        { "name": "transaction_analysis", "label": "Transaction Analysis", "status": "complete", "started_at": "2026-07-04T11:00:29+01:00", "finished_at": "2026-07-04T11:00:44+01:00" },
+        { "name": "risk_prediction", "label": "Risk Prediction", "status": "complete", "started_at": "2026-07-04T11:00:44+01:00", "finished_at": "2026-07-04T11:00:52+01:00" },
+        { "name": "report_generation", "label": "Report Generation", "status": "complete", "started_at": "2026-07-04T11:00:52+01:00", "finished_at": "2026-07-04T11:01:10+01:00" }
+      ],
+      "started_at": "2026-07-04T11:00:00+01:00",
+      "finished_at": "2026-07-04T11:01:10+01:00",
+      "error": null
+    }
+  ],
+  "app-2230": [
+    {
+      "id": "job-2230-a",
+      "application_id": "app-2230",
+      "status": "complete",
+      "current_stage": "done",
+      "stages": [
+        { "name": "validation", "label": "Validation", "status": "complete", "started_at": "2026-09-17T10:15:00+01:00", "finished_at": "2026-09-17T10:15:07+01:00" },
+        { "name": "policy_retrieval", "label": "Policy Retrieval", "status": "complete", "started_at": "2026-09-17T10:15:07+01:00", "finished_at": "2026-09-17T10:15:18+01:00" },
+        { "name": "financial_analysis", "label": "Financial Analysis", "status": "complete", "started_at": "2026-09-17T10:15:18+01:00", "finished_at": "2026-09-17T10:15:29+01:00" },
+        { "name": "transaction_analysis", "label": "Transaction Analysis", "status": "complete", "started_at": "2026-09-17T10:15:29+01:00", "finished_at": "2026-09-17T10:15:44+01:00" },
+        { "name": "risk_prediction", "label": "Risk Prediction", "status": "complete", "started_at": "2026-09-17T10:15:44+01:00", "finished_at": "2026-09-17T10:15:52+01:00" },
+        { "name": "report_generation", "label": "Report Generation", "status": "complete", "started_at": "2026-09-17T10:15:52+01:00", "finished_at": "2026-09-17T10:16:20+01:00" }
+      ],
+      "started_at": "2026-09-17T10:15:00+01:00",
+      "finished_at": "2026-09-17T10:16:20+01:00",
+      "error": null
+    }
+  ],
+  "app-2214": [
+    {
+      "id": "job-2214-a",
+      "application_id": "app-2214",
+      "status": "running",
+      "current_stage": "financial_analysis",
+      "stages": [
+        { "name": "validation", "label": "Validation", "status": "complete", "started_at": "2026-09-29T09:00:00+01:00", "finished_at": "2026-09-29T09:00:08+01:00" },
+        { "name": "policy_retrieval", "label": "Policy Retrieval", "status": "complete", "started_at": "2026-09-29T09:00:08+01:00", "finished_at": "2026-09-29T09:00:19+01:00" },
+        { "name": "financial_analysis", "label": "Financial Analysis", "status": "running", "started_at": "2026-09-29T09:00:19+01:00", "finished_at": null },
+        { "name": "transaction_analysis", "label": "Transaction Analysis", "status": "pending", "started_at": null, "finished_at": null },
+        { "name": "risk_prediction", "label": "Risk Prediction", "status": "pending", "started_at": null, "finished_at": null },
+        { "name": "report_generation", "label": "Report Generation", "status": "pending", "started_at": null, "finished_at": null }
+      ],
+      "started_at": "2026-09-29T09:00:00+01:00",
+      "finished_at": null,
+      "error": null
+    }
+  ],
+  "app-2240": [
+    {
+      "id": "job-2240-a",
+      "application_id": "app-2240",
+      "status": "complete",
+      "current_stage": "done",
+      "stages": [
+        { "name": "validation", "label": "Validation", "status": "complete", "started_at": "2026-09-25T10:00:00+01:00", "finished_at": "2026-09-25T10:00:07+01:00" },
+        { "name": "policy_retrieval", "label": "Policy Retrieval", "status": "complete", "started_at": "2026-09-25T10:00:07+01:00", "finished_at": "2026-09-25T10:00:18+01:00" },
+        { "name": "financial_analysis", "label": "Financial Analysis", "status": "complete", "started_at": "2026-09-25T10:00:18+01:00", "finished_at": "2026-09-25T10:00:29+01:00" },
+        { "name": "transaction_analysis", "label": "Transaction Analysis", "status": "complete", "started_at": "2026-09-25T10:00:29+01:00", "finished_at": "2026-09-25T10:00:44+01:00" },
+        { "name": "risk_prediction", "label": "Risk Prediction", "status": "complete", "started_at": "2026-09-25T10:00:44+01:00", "finished_at": "2026-09-25T10:00:52+01:00" },
+        { "name": "report_generation", "label": "Report Generation", "status": "complete", "started_at": "2026-09-25T10:00:52+01:00", "finished_at": "2026-09-25T10:01:10+01:00" }
+      ],
+      "started_at": "2026-09-25T10:00:00+01:00",
+      "finished_at": "2026-09-25T10:01:10+01:00",
+      "error": null
+    }
+  ],
+  "app-demo-001": [
+    {
+      "id": "job-demo-001",
+      "application_id": "app-demo-001",
+      "status": "complete",
+      "current_stage": "done",
+      "stages": [
+        { "name": "validation", "label": "Validation", "status": "complete", "started_at": "2026-09-05T09:20:00+01:00", "finished_at": "2026-09-05T09:20:06+01:00" },
+        { "name": "policy_retrieval", "label": "Policy Retrieval", "status": "complete", "started_at": "2026-09-05T09:20:06+01:00", "finished_at": "2026-09-05T09:20:17+01:00" },
+        { "name": "financial_analysis", "label": "Financial Analysis", "status": "complete", "started_at": "2026-09-05T09:20:17+01:00", "finished_at": "2026-09-05T09:20:28+01:00" },
+        { "name": "transaction_analysis", "label": "Transaction Analysis", "status": "complete", "started_at": "2026-09-05T09:20:28+01:00", "finished_at": "2026-09-05T09:20:43+01:00" },
+        { "name": "risk_prediction", "label": "Risk Prediction", "status": "complete", "started_at": "2026-09-05T09:20:43+01:00", "finished_at": "2026-09-05T09:20:51+01:00" },
+        { "name": "report_generation", "label": "Report Generation", "status": "complete", "started_at": "2026-09-05T09:20:51+01:00", "finished_at": "2026-09-05T09:21:09+01:00" }
+      ],
+      "started_at": "2026-09-05T09:20:00+01:00",
+      "finished_at": "2026-09-05T09:21:09+01:00",
+      "error": null
+    }
+  ]
+}

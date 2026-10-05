@@ -1,0 +1,35 @@
+<button class="mobile-sidebar-toggle" aria-label="Toggle menu"><i data-icon="menu" data-size="20"></i></button>
+<aside class="sidebar">
+  <a href="{{ROOT}}app/analyst/dashboard.html" class="brand">
+    <span class="brand-mark">K</span>
+    <span class="brand-text"><strong>Kredt</strong><small>Credit Investigation</small></span>
+  </a>
+
+  <div class="sidebar-section">Workspace</div>
+  <nav class="sidebar-nav">
+    <a href="{{ROOT}}app/analyst/dashboard.html" class="sidebar-link" data-page="analyst-dashboard">
+      <i class="sidebar-icon" data-icon="grid"></i><span>Dashboard</span>
+    </a>
+    <a href="{{ROOT}}app/analyst/queue.html" class="sidebar-link" data-page="analyst-queue">
+      <i class="sidebar-icon" data-icon="inbox"></i><span>Applications</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-section">Account</div>
+  <nav class="sidebar-nav">
+    <a href="#" data-profile-link class="sidebar-link" data-page="analyst-profile">
+      <i class="sidebar-icon" data-icon="user"></i><span>Profile</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-bottom">
+    <div class="sidebar-user">
+      <span class="sidebar-user-avatar" data-user-initials></span>
+      <span class="sidebar-user-meta">
+        <span class="sidebar-user-name" data-user-name></span>
+        <span class="sidebar-user-sub" data-user-role></span>
+      </span>
+      <a href="#" class="sidebar-logout" data-logout aria-label="Log out" title="Log out"><i data-icon="logout" data-size="17"></i></a>
+    </div>
+  </div>
+</aside>

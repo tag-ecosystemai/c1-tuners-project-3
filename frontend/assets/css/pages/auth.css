@@ -1,0 +1,105 @@
+/* KREDT — authentication + onboarding screens */
+.auth-page { min-height: 100vh; flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 32px 16px; background: var(--color-bg); }
+.auth-brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 19px; color: var(--color-navy); margin-bottom: 24px; }
+.auth-brand .brand-mark { width: 34px; height: 34px; border-radius: 9px; background: var(--color-navy); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 17px; }
+.auth-card { width: 100%; max-width: 440px; background: #fff; border: 1px solid var(--color-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-card); padding: 34px; }
+.auth-card-wide { max-width: 560px; }
+.auth-card h1 { font-size: 24px; margin-bottom: 6px; }
+.auth-card .auth-sub { font-size: 14.5px; color: var(--color-text-faint); margin: 0 0 24px; }
+.auth-alert { background: var(--color-error-bg); color: var(--color-error); border-radius: var(--radius-sm); padding: 10px 12px; font-size: 13.5px; margin-bottom: 16px; display: none; }
+.auth-alert.is-visible { display: block; }
+.auth-switch { text-align: center; font-size: 14px; margin: 22px 0 0; color: var(--color-text-faint); }
+.auth-switch a { color: var(--color-teal-dark); font-weight: 600; }
+.auth-hint { margin-top: 18px; padding: 12px 14px; background: var(--color-navy-tint); border-radius: var(--radius-sm); font-size: 12.5px; color: var(--color-text-muted); line-height: 1.55; }
+.auth-hint strong { color: var(--color-navy); }
+.auth-submit { width: 100%; margin-top: 6px; }
+
+.role-choice { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.role-option { position: relative; border: 1.5px solid var(--color-border); border-radius: var(--radius-md); padding: 14px; cursor: pointer; background: #fff; transition: border-color .12s ease, background .12s ease; }
+.role-option:hover { border-color: var(--color-teal); }
+.role-option input { position: absolute; opacity: 0; pointer-events: none; }
+.role-option h3 { font-size: 15px; margin-bottom: 2px; }
+.role-option p { margin: 0; font-size: 12.5px; color: var(--color-text-faint); line-height: 1.4; }
+.role-option:has(input:checked) { border-color: var(--color-teal); background: var(--color-teal-tint); }
+.role-option:has(input:focus-visible) { outline: 2px solid var(--color-teal); outline-offset: 2px; }
+
+.profile-section-title { font-size: 12.5px; font-weight: 700; color: var(--color-text-faint); margin: 22px 0 12px; }
+.profile-section-title:first-of-type { margin-top: 0; }
+/* Inline, per-field verification indicator — sits where .form-error would,
+   directly under its own input, instead of one combined checklist at the
+   bottom of the form. */
+.field-check {
+  display: none;
+  align-items: center;
+  gap: 7px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--color-success);
+  margin-top: 7px;
+}
+.field-check .tick {
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--color-success); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; flex-shrink: 0;
+}
+.form-field.is-verified .field-check { display: flex; }
+.form-field.is-verified .form-error { display: none; }
+
+.profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 28px; }
+@media (max-width: 560px) { .role-choice, .profile-grid { grid-template-columns: 1fr; } .auth-card { padding: 24px 20px; } }
+
+/* ---------- Split layout ---------- */
+.auth-split { display: grid; grid-template-columns: minmax(360px, 5fr) 6fr; min-height: 100vh; }
+.auth-aside {
+  position: relative;
+  background:
+    radial-gradient(520px 320px at 100% 0%, rgba(15,157,138,.30), transparent 65%),
+    linear-gradient(160deg, #1B3A63 0%, var(--color-navy-dark) 100%);
+  color: #fff;
+  padding: 40px 52px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  position: sticky; top: 0; height: 100vh;
+}
+.aside-brand { display: inline-flex; align-items: center; gap: 11px; font-weight: 800; font-size: 19px; letter-spacing: -0.02em; color: #fff; }
+.aside-brand .brand-mark {
+  width: 36px; height: 36px; border-radius: 11px;
+  background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.18); color: #fff;
+  display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 800;
+  box-shadow: inset 0 -3px 0 var(--color-teal);
+}
+.aside-body h2 { color: #fff; font-size: 34px; line-height: 1.12; letter-spacing: -0.03em; margin-bottom: 16px; max-width: 420px; }
+.aside-body p { color: #B4C2D8; font-size: 16px; line-height: 1.6; max-width: 400px; margin-bottom: 28px; }
+.aside-points { display: flex; flex-direction: column; gap: 14px; }
+.aside-points li { display: flex; align-items: center; gap: 12px; font-size: 14.5px; color: #E3EAF4; }
+.aside-points svg { width: 24px; height: 24px; padding: 5px; border-radius: 50%; background: rgba(93,217,198,.16); color: #5DD9C6; }
+.aside-foot { font-size: 13px; color: #8FA3C0; }
+
+.auth-split .auth-page { background: var(--color-bg); }
+.auth-split .auth-brand { display: none; }
+.auth-card { border-radius: 18px; box-shadow: 0 1px 2px rgba(20,45,78,.04), 0 24px 48px -24px rgba(20,45,78,.18); }
+.auth-card h1 { font-size: 26px; letter-spacing: -0.03em; }
+.auth-hint { background: #F4F7FB; border: 1px dashed #CBD5E1; }
+.auth-submit { margin-top: 10px; }
+
+@media (max-width: 960px) {
+  .auth-split { grid-template-columns: 1fr; }
+  .auth-aside { display: none; }
+  .auth-split .auth-brand { display: flex; }
+}
+
+/* ---------- Registration success ---------- */
+.success-state { text-align: center; }
+.success-check { width: 72px; height: 72px; margin: 4px auto 18px; border-radius: 50%; background: var(--color-success-bg); color: var(--color-success); display: flex; align-items: center; justify-content: center; animation: pop-in .45s cubic-bezier(.2,.9,.3,1.3) both; }
+.sc-ring { stroke-dasharray: 145; stroke-dashoffset: 145; animation: draw .7s .1s ease forwards; opacity: .35; }
+.sc-tick { stroke-dasharray: 40; stroke-dashoffset: 40; animation: draw .45s .5s ease forwards; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes pop-in { from { transform: scale(.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.success-state h1 { margin-bottom: 8px; }
+.success-state .auth-sub { margin-bottom: 22px; }
+.success-steps { display: flex; justify-content: center; gap: 14px; margin: 0 0 26px; font-size: 12.5px; color: var(--color-text-faint); flex-wrap: nowrap; white-space: nowrap; }
+.success-steps li { display: flex; align-items: center; gap: 7px; }
+.success-steps li span { width: 9px; height: 9px; border-radius: 50%; background: #D5DDE8; }
+.success-steps li.is-done { color: var(--color-success); } .success-steps li.is-done span { background: var(--color-success); }
+.success-steps li.is-now { color: var(--color-navy); font-weight: 600; } .success-steps li.is-now span { background: var(--color-teal); box-shadow: 0 0 0 4px var(--color-teal-tint); }
+.success-note { margin: 14px 0 0; font-size: 12.5px; color: var(--color-text-faint); }
