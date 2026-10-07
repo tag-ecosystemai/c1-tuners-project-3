@@ -1,14 +1,19 @@
 import os
 import sys
 
-# Anchor import to backend/
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "backend")))
+sys.path.append(
+    os.path.abspath(
+        os.path.join(os.path.dirname(__file__), "..", "backend")
+    )
+)
 
 from app.db import SessionLocal, engine, Base
 from app.models.application import ApplicationModel
 
-# Ensure tables are built
+
+# Create database tables
 Base.metadata.create_all(bind=engine)
+
 
 CONSUMER_DEMO_APPLICATIONS = [
     {
@@ -23,21 +28,26 @@ CONSUMER_DEMO_APPLICATIONS = [
             "employment_duration_months": 42,
             "education_level": "MSc",
             "housing_type": "Owns",
-            "location": "Lekki, Lagos"
+            "location": "Lekki, Lagos",
+            "family_members": 4,
+            "income_type": "Working",
+            "occupation": "IT Staff",
+            "owns_car": True,
+            "owns_property": True,
         },
         "loan": {
             "amount": 2500000.0,
             "currency": "NGN",
             "purpose": "Home Improvement",
-            "tenor_months": 18
+            "tenor_months": 18,
         },
         "financials": {
             "monthly_salary_income": 850000.0,
             "additional_income": 120000.0,
             "monthly_living_expenses": 350000.0,
             "existing_loan_obligations": 100000.0,
-            "total_debt": 600000.0
-        }
+            "total_debt": 600000.0,
+        },
     },
     {
         "application_id": "CR-CONS-02",
@@ -51,21 +61,26 @@ CONSUMER_DEMO_APPLICATIONS = [
             "employment_duration_months": 8,
             "education_level": "BSc",
             "housing_type": "Renting",
-            "location": "Ikeja, Lagos"
+            "location": "Ikeja, Lagos",
+            "family_members": 2,
+            "income_type": "Working",
+            "occupation": "Accountant",
+            "owns_car": False,
+            "owns_property": False,
         },
         "loan": {
             "amount": 1500000.0,
             "currency": "NGN",
             "purpose": "Debt Consolidation",
-            "tenor_months": 12
+            "tenor_months": 12,
         },
         "financials": {
             "monthly_salary_income": 280000.0,
             "additional_income": 0.0,
             "monthly_living_expenses": 160000.0,
-            "existing_loan_obligations": 140000.0,  # 50% DTI -> Will fail the 40% rule
-            "total_debt": 1100000.0
-        }
+            "existing_loan_obligations": 140000.0,
+            "total_debt": 1100000.0,
+        },
     },
     {
         "application_id": "CR-CONS-03",
@@ -79,50 +94,78 @@ CONSUMER_DEMO_APPLICATIONS = [
             "employment_duration_months": 60,
             "education_level": "HND",
             "housing_type": "Owns",
-            "location": "Wuse, Abuja"
+            "location": "Wuse, Abuja",
+            "family_members": 5,
+            "income_type": "Self-employed",
+            "occupation": "Business Owner",
+            "owns_car": True,
+            "owns_property": True,
         },
         "loan": {
             "amount": 800000.0,
             "currency": "NGN",
             "purpose": "Medical Expenses",
-            "tenor_months": 6
+            "tenor_months": 6,
         },
         "financials": {
             "monthly_salary_income": 450000.0,
             "additional_income": 50000.0,
             "monthly_living_expenses": 250000.0,
             "existing_loan_obligations": 80000.0,
-            "total_debt": 320000.0
-        }
-    }
+            "total_debt": 320000.0,
+        },
+    },
 ]
+
 
 def seed():
     db = SessionLocal()
+
     try:
         for app_data in CONSUMER_DEMO_APPLICATIONS:
             existing = (
                 db.query(ApplicationModel)
-                .filter(ApplicationModel.application_id == app_data["application_id"])
+                .filter(
+                    ApplicationModel.application_id
+                    == app_data["application_id"]
+                )
                 .first()
             )
+
             if not existing:
                 record = ApplicationModel(
                     application_id=app_data["application_id"],
                     status=app_data["status"],
                     applicant=app_data["applicant"],
                     loan=app_data["loan"],
-                    financials=app_data["financials"]
+                    financials=app_data["financials"],
                 )
+
                 db.add(record)
-                print(f"Seeded: {app_data['application_id']} ({app_data['applicant']['full_name']})")
+
+                print(
+                    f"Seeded: {app_data['application_id']} "
+                    f"({app_data['applicant']['full_name']})"
+                )
+
             else:
-                print(f"Skipped existing: {app_data['application_id']}")
+                existing.status = app_data["status"]
+                existing.applicant = app_data["applicant"]
+                existing.loan = app_data["loan"]
+                existing.financials = app_data["financials"]
+
+                print(
+                    f"Updated: {app_data['application_id']} "
+                    f"({app_data['applicant']['full_name']})"
+                )
 
         db.commit()
+
         print("Consumer demo data seeded successfully!")
+
     finally:
         db.close()
+
 
 if __name__ == "__main__":
     seed()
