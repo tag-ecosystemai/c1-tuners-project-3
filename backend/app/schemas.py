@@ -1,6 +1,7 @@
 from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional
+
 from pydantic import BaseModel, Field
 
 
@@ -11,17 +12,24 @@ class ConsumerApplicantDetails(BaseModel):
     age: int = Field(ge=18, le=100)
     gender: Optional[str] = "Unspecified"
     marital_status: str = "Single"
-    employment_status: str = "Employed"  # Employed, Self-Employed, Unemployed, Retired
+    employment_status: str = "Employed"
     employment_duration_months: int = Field(ge=0)
     education_level: Optional[str] = "BSc"
-    housing_type: str = "Renting"  # Renting, Owns, Living with Parents
+    housing_type: str = "Renting"
     location: str
+
+    # ── Credit Risk Model Fields ──
+    family_members: int = Field(ge=1)
+    income_type: str = "Working"
+    occupation: Optional[str] = None
+    owns_car: bool = False
+    owns_property: bool = False
 
 
 class ConsumerLoanDetails(BaseModel):
     amount: float = Field(gt=0)
     currency: str = "NGN"
-    purpose: str  # Personal, Medical, Education, Auto, Debt Consolidation
+    purpose: str
     tenor_months: int = Field(gt=0)
 
 
@@ -53,7 +61,7 @@ class ApplicationRecord(ApplicationCreate):
 class DocumentMetadata(BaseModel):
     document_id: str
     application_id: str
-    document_type: str  # payslip, bank_statement, id_card, utility_bill
+    document_type: str
     file_name: str
     storage_path: str
     uploaded_at: datetime = Field(default_factory=datetime.utcnow)
@@ -92,13 +100,13 @@ class PolicySummary(BaseModel):
 class ConsumerFinancialMetrics(BaseModel):
     total_monthly_income: float
     disposable_income: float
-    debt_to_income_ratio: float  # DTI: Total monthly debt obligations / Total monthly income
+    debt_to_income_ratio: float
     expense_to_income_ratio: float
-    loan_to_income_ratio: float  # Requested loan amount / Annual Income
+    loan_to_income_ratio: float
 
 
 class TransactionFinding(BaseModel):
-    type: str  # SALARY_DETECTED, GAMBLING_OUTFLOW, HIGH_NSF_FEES, IRREGULAR_EXPENSE
+    type: str
     severity: SeverityEnum
     amount: float
     date: str
@@ -111,6 +119,8 @@ class MLPredictionResult(BaseModel):
     model_version: str
     probability_of_default: float
     risk_band: RiskBandEnum
+
+
     prediction_horizon: str = "12_MONTHS"
 
 
@@ -137,3 +147,4 @@ class InvestigationResponse(BaseModel):
     transaction_findings: List[TransactionFinding]
     credit_risk: MLPredictionResult
     report: GeneratedReport
+
