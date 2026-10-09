@@ -3,28 +3,42 @@
   const root = document.getElementById('page-root');
 
   function loanTypeTitle(app) { return app.loan_type === 'business' ? 'Business Loan' : 'Individual Loan'; }
+  const requestedAmount = (app) => app.loan?.amount ?? app.requested_amount ?? 0;
+  const loanTenor = (app) => app.loan?.tenor_months ?? app.tenor_months ?? 12;
+  const currency = (app) => app.loan?.currency ?? app.currency ?? 'NGN';
+  const loanPurpose = (app) => app.loan?.purpose ?? app.purpose ?? '—';
 
   function applicantFieldsHTML(app) {
     const isBusiness = app.loan_type === 'business';
-    const d = app.applicant_details || {};
-    const fin = d.financials || {};
+    const d = app.applicant || app.applicant_details || {};
+    const fin = app.financials || d.financials || {};
+    const curr = currency(app);
+
     if (isBusiness) {
       return `
-        <div class="kv-item"><div class="kv-label">Business Name</div><div class="kv-value">${KredtUI.escapeHtml(d.business_name || '—')}</div></div>
+        <div class="kv-item"><div class="kv-label">Business Name</div><div class="kv-value">${KredtUI.escapeHtml(d.business_name || d.full_name || '—')}</div></div>
         <div class="kv-item"><div class="kv-label">Business Type</div><div class="kv-value">${KredtUI.escapeHtml(d.business_type || '—')}</div></div>
         <div class="kv-item"><div class="kv-label">Industry</div><div class="kv-value">${KredtUI.escapeHtml(d.industry || '—')}</div></div>
         <div class="kv-item"><div class="kv-label">Business Age</div><div class="kv-value">${d.business_age_months ?? '—'} months</div></div>
         <div class="kv-item"><div class="kv-label">Location</div><div class="kv-value">${KredtUI.escapeHtml(d.location || '—')}</div></div>
-        <div class="kv-item"><div class="kv-label">Monthly Revenue</div><div class="kv-value">${KredtUI.currency(fin.monthly_revenue, app.currency)}</div></div>
-        <div class="kv-item"><div class="kv-label">Monthly Expenses</div><div class="kv-value">${KredtUI.currency(fin.monthly_expenses, app.currency)}</div></div>
-        <div class="kv-item"><div class="kv-label">Existing Monthly Debt Payment</div><div class="kv-value">${KredtUI.currency(fin.existing_monthly_debt_payment, app.currency)}</div></div>
-        <div class="kv-item"><div class="kv-label">Total Outstanding Debt</div><div class="kv-value">${KredtUI.currency(fin.total_outstanding_debt, app.currency)}</div></div>`;
+        <div class="kv-item"><div class="kv-label">Monthly Revenue</div><div class="kv-value">${KredtUI.currency(fin.monthly_revenue ?? fin.monthly_salary_income, curr)}</div></div>
+        <div class="kv-item"><div class="kv-label">Additional Income</div><div class="kv-value">${KredtUI.currency(fin.additional_income || 0, curr)}</div></div>
+        <div class="kv-item"><div class="kv-label">Monthly Expenses</div><div class="kv-value">${KredtUI.currency(fin.monthly_expenses ?? fin.monthly_living_expenses, curr)}</div></div>
+        <div class="kv-item"><div class="kv-label">Existing Debt Payment</div><div class="kv-value">${KredtUI.currency(fin.existing_monthly_debt_payment ?? fin.existing_loan_obligations ?? 0, curr)}</div></div>
+        <div class="kv-item"><div class="kv-label">Total Debt</div><div class="kv-value">${KredtUI.currency(fin.total_outstanding_debt ?? fin.total_debt ?? 0, curr)}</div></div>`;
     }
+
     return `
       <div class="kv-item"><div class="kv-label">Full Name</div><div class="kv-value">${KredtUI.escapeHtml(d.full_name || '—')}</div></div>
-      <div class="kv-item"><div class="kv-label">Employment Status</div><div class="kv-value">${KredtUI.escapeHtml(d.employment_status || '—')}</div></div>
-      <div class="kv-item"><div class="kv-label">Monthly Income</div><div class="kv-value">${KredtUI.currency(d.monthly_income, app.currency)}</div></div>
-      <div class="kv-item"><div class="kv-label">Monthly Expenses</div><div class="kv-value">${KredtUI.currency(d.monthly_expenses, app.currency)}</div></div>`;
+      <div class="kv-item"><div class="kv-label">Demographics</div><div class="kv-value">${d.age ? `${d.age} yrs` : '—'} • ${KredtUI.escapeHtml(d.gender || '—')} • ${KredtUI.escapeHtml(d.marital_status || '—')}</div></div>
+      <div class="kv-item"><div class="kv-label">Employment</div><div class="kv-value">${KredtUI.escapeHtml(d.employment_status || '—')} (${d.employment_duration_months != null ? `${d.employment_duration_months} mos` : '—'})</div></div>
+      <div class="kv-item"><div class="kv-label">Education & Housing</div><div class="kv-value">${KredtUI.escapeHtml(d.education_level || '—')} • ${KredtUI.escapeHtml(d.housing_type || '—')}</div></div>
+      <div class="kv-item"><div class="kv-label">Location</div><div class="kv-value">${KredtUI.escapeHtml(d.location || '—')}</div></div>
+      <div class="kv-item"><div class="kv-label">Monthly Salary Income</div><div class="kv-value">${KredtUI.currency(fin.monthly_salary_income ?? d.monthly_income, curr)}</div></div>
+      <div class="kv-item"><div class="kv-label">Additional Income</div><div class="kv-value">${KredtUI.currency(fin.additional_income || 0, curr)}</div></div>
+      <div class="kv-item"><div class="kv-label">Monthly Living Expenses</div><div class="kv-value">${KredtUI.currency(fin.monthly_living_expenses ?? d.monthly_expenses, curr)}</div></div>
+      <div class="kv-item"><div class="kv-label">Monthly Debt Obligations</div><div class="kv-value">${KredtUI.currency(fin.existing_loan_obligations || 0, curr)}</div></div>
+      <div class="kv-item"><div class="kv-label">Total Outstanding Debt</div><div class="kv-value">${KredtUI.currency(fin.total_debt || 0, curr)}</div></div>`;
   }
 
   function timelineHTML(app) {
@@ -74,6 +88,11 @@
       ]);
       KredtAnalystShell.setBreadcrumb(app.id, app.reference, 'Application');
 
+      const appName = app.applicant?.full_name || app.applicant_details?.business_name || app.applicant_details?.full_name || '—';
+      const amount = requestedAmount(app);
+      const curr = currency(app);
+      const tenor = loanTenor(app);
+
       root.innerHTML = `
         ${app.is_demo ? `<div class="demo-banner demo-banner-inset">FICTIONAL DEMO DATA</div>` : ''}
 
@@ -82,7 +101,7 @@
             <div>
               <a href="../queue.html" class="text-faint" style="font-size:13.5px;">← Applications</a>
               <h1 style="margin-top:6px;">${KredtUI.escapeHtml(app.reference)}</h1>
-              <p>${KredtUI.escapeHtml(app.applicant_details?.business_name || app.applicant_details?.full_name || '—')} • ${loanTypeTitle(app)} • ${KredtUI.currency(app.requested_amount, app.currency)}${app.is_demo ? ' • Demo Application' : ''}</p>
+              <p>${KredtUI.escapeHtml(appName)} • ${loanTypeTitle(app)} • ${KredtUI.currency(amount, curr)} (${tenor} mos)${app.is_demo ? ' • Demo Application' : ''}</p>
             </div>
             <div style="display:flex; align-items:center; gap:10px;">
               ${KredtUI.statusBadge(app.status)}
@@ -100,16 +119,17 @@
               <h3 style="margin-bottom:16px;">Loan Information</h3>
               <div class="kv-grid">
                 <div class="kv-item"><div class="kv-label">Loan Type</div><div class="kv-value">${loanTypeTitle(app)}</div></div>
-                <div class="kv-item"><div class="kv-label">Requested Amount</div><div class="kv-value">${KredtUI.currency(app.requested_amount, app.currency)}</div></div>
-                <div class="kv-item"><div class="kv-label">Currency</div><div class="kv-value">${app.currency}</div></div>
+                <div class="kv-item"><div class="kv-label">Requested Amount</div><div class="kv-value">${KredtUI.currency(amount, curr)}</div></div>
+                <div class="kv-item"><div class="kv-label">Tenor</div><div class="kv-value">${tenor} months</div></div>
+                <div class="kv-item"><div class="kv-label">Currency</div><div class="kv-value">${curr}</div></div>
               </div>
               <hr class="divider">
               <div class="kv-label" style="margin-bottom:6px;">Purpose</div>
-              <div style="font-size:14px;">${KredtUI.escapeHtml(app.purpose || '—')}</div>
+              <div style="font-size:14px;">${KredtUI.escapeHtml(loanPurpose(app))}</div>
             </div>
 
             <div class="card card-pad">
-              <h3 style="margin-bottom:16px;">Applicant Information</h3>
+              <h3 style="margin-bottom:16px;">Applicant & Financial Profile</h3>
               <div class="kv-grid">${applicantFieldsHTML(app)}</div>
             </div>
           </div>
@@ -129,7 +149,6 @@
         </div>`;
 
       document.getElementById('action-slot').innerHTML = await actionButtonHTML(app);
-      // Starting an investigation is confirmed inline on this page — no separate screen.
       const startBtn = document.getElementById('start-investigation-btn');
       const confirmSlot = document.getElementById('confirm-slot');
       startBtn?.addEventListener('click', () => {

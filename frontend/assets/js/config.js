@@ -17,7 +17,8 @@
 // decision) — see api.js for where auth calls will slot in later.
 
 window.KREDT_API_BASE = window.KREDT_API_BASE || 'http://localhost:8000/api/v1';
-window.KREDT_USE_MOCK = window.KREDT_USE_MOCK !== undefined ? window.KREDT_USE_MOCK : true;
+window.KREDT_USE_MOCK = false;
+// window.KREDT_USE_MOCK = window.KREDT_USE_MOCK !== undefined ? window.KREDT_USE_MOCK : true;
 
 // Simulated network latency for mock calls, so loading states are visible
 // and feel like a real app rather than snapping instantly.

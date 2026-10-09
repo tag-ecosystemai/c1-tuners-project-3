@@ -1,7 +1,7 @@
 // Borrower application screen.
-//   Draft      -> ?step=documents (Step 2) or ?step=review (Step 3)
-//                 (Step 1 lives in new.html?id=...)
-//   Submitted+ -> Tracking
+//   Draft       -> ?step=documents (Step 2) or ?step=review (Step 3)
+//                  (Step 1 lives in new.html?id=...)
+//   Submitted+  -> Tracking
 (function () {
   const params = new URLSearchParams(window.location.search);
   const appId = params.get('id');
@@ -19,8 +19,11 @@
   }
 
   function loanTypeTitle(app) { return app.loan_type === 'business' ? 'Business Loan' : 'Individual Loan'; }
-  const applicantName = (app) => app.applicant_details?.business_name || app.applicant_details?.full_name || '';
-  const isStep1Complete = (app) => !!(app.loan_type && app.requested_amount > 0 && app.purpose && applicantName(app));
+  const applicantName = (app) => app.applicant?.full_name || app.applicant_details?.business_name || app.applicant_details?.full_name || '';
+  const requestedAmount = (app) => app.loan?.amount ?? app.requested_amount ?? 0;
+  const loanTenor = (app) => app.loan?.tenor_months ?? app.tenor_months ?? 12;
+  const loanPurpose = (app) => app.loan?.purpose ?? app.purpose ?? '';
+  const isStep1Complete = (app) => !!(app.loan_type && requestedAmount(app) > 0 && loanPurpose(app) && applicantName(app));
 
   // ============================================================
   // STEP 2 — Documents
@@ -32,16 +35,12 @@
     return map[type] || 'DOC';
   }
 
-  // What we ask borrowers for, grouped the way a loan officer would explain it.
-  // Business-specific items only show for business applications. This is
-  // informational only — it doesn't gate the upload zone below, since the
-  // backend hasn't confirmed a hard-required list yet (see config.js).
   function documentChecklistGroups(loanType) {
     const groups = [
       {
         icon: 'idcard', title: 'Identity Verification',
         items: [
-          { label: 'Government-issued ID — National ID (NIN) slip, international passport, driver\u2019s license, or voter\u2019s card', required: true },
+          { label: 'Government-issued ID — National ID (NIN) slip, international passport, driver license, or voter card', required: true },
           { label: 'Bank Verification Number (BVN)', required: true },
           { label: 'Recent passport photograph', required: false },
         ],
@@ -58,7 +57,7 @@
         icon: 'home', title: 'Proof of Address',
         items: [
           { label: 'Recent utility bill — electricity, water, or waste', required: true },
-          { label: 'Tenancy agreement or landlord\u2019s letter', required: false },
+          { label: 'Tenancy agreement or landlord letter', required: false },
         ],
       },
     ];
@@ -80,8 +79,8 @@
     const groups = documentChecklistGroups(loanType);
     return `
       <div class="card card-pad doc-checklist">
-        <h3 style="margin-bottom:6px;">Documents You'll Need</h3>
-        <p class="doc-checklist-intro">Have these ready before you upload. Required documents must be provided to submit your application; optional ones can strengthen your case but won't block submission.</p>
+        <h3 style="margin-bottom:6px;">Documents You will Need</h3>
+        <p class="doc-checklist-intro">Have these ready before you upload. Required documents must be provided to submit your application; optional ones can strengthen your case but will not block submission.</p>
         <div class="doc-checklist-groups">
           ${groups.map((g) => `
             <div class="doc-checklist-group">
@@ -101,10 +100,9 @@
       </div>`;
   }
 
-  // Returns an error message for a rejected file, or null if it can be uploaded.
   function validateFile(file) {
     const ext = (file.name.split('.').pop() || '').toLowerCase();
-    if (!ALLOWED_EXT.includes(ext)) return "This file type isn't supported. Please upload a PDF, JPG or PNG.";
+    if (!ALLOWED_EXT.includes(ext)) return "This file type is not supported. Please upload a PDF, JPG or PNG.";
     const maxMb = window.KREDT_MAX_UPLOAD_MB;
     if (maxMb && file.size > maxMb * 1024 * 1024) return `This file is too large. Maximum file size: ${maxMb} MB.`;
     return null;
@@ -147,7 +145,6 @@
 
     async function refreshList() {
       const docs = await KredtApi.documents.list(appId);
-      // Keep any in-flight / failed rows while the confirmed list refreshes.
       const pending = Array.from(list.querySelectorAll('[data-uploading]')).map((n) => n.outerHTML);
       list.innerHTML = docs.map((d) => `
         <div class="doc-row" data-doc="${d.id}">
@@ -175,7 +172,7 @@
       });
     }
 
-    const failedFiles = new Map(); // tempId -> File, so Retry can re-send it
+    const failedFiles = new Map();
 
     function uploadingRowHTML(id, name) {
       return `<div class="doc-row" data-uploading="${id}">
@@ -247,10 +244,15 @@
   // ============================================================
   async function renderReviewStep(app) {
     const isBusiness = app.loan_type === 'business';
-    const d = app.applicant_details || {};
-    const fin = d.financials || {};
+    const d = app.applicant || app.applicant_details || {};
+    const fin = app.financials || d.financials || {};
     const docs = await KredtApi.documents.list(appId);
     const kv = (label, value) => `<div class="kv-item"><div class="kv-label">${label}</div><div class="kv-value">${value}</div></div>`;
+
+    const currency = app.loan?.currency || app.currency || 'NGN';
+    const amount = requestedAmount(app);
+    const tenor = loanTenor(app);
+    const purpose = loanPurpose(app);
 
     root.innerHTML = `
       <div class="page-header">
@@ -264,32 +266,45 @@
           <div class="review-section-head"><h3>Loan Details</h3><a href="new.html?id=${appId}" class="btn btn-secondary btn-sm">Edit</a></div>
           <div class="kv-grid">
             ${kv('Loan Type', loanTypeTitle(app))}
-            ${kv('Requested Amount', KredtUI.currency(app.requested_amount, app.currency))}
+            ${kv('Requested Amount', KredtUI.currency(amount, currency))}
+            ${kv('Tenor', `${tenor} months`)}
+            ${kv('Currency', currency)}
           </div>
           <div style="margin-top:16px;">
             <div class="kv-label" style="margin-bottom:6px;">Purpose</div>
-            <div style="font-size:14px; color:var(--color-text-muted);">${E(app.purpose || '—')}</div>
+            <div style="font-size:14px; color:var(--color-text-muted);">${E(purpose || '—')}</div>
           </div>
         </div>
 
         <div class="review-section">
-          <div class="review-section-head"><h3>Applicant Details</h3><a href="new.html?id=${appId}" class="btn btn-secondary btn-sm">Edit</a></div>
+          <div class="review-section-head"><h3>Applicant &amp; Financial Details</h3><a href="new.html?id=${appId}" class="btn btn-secondary btn-sm">Edit</a></div>
           <div class="kv-grid">
             ${isBusiness ? `
-              ${kv('Business Name', E(d.business_name || '—'))}
+              ${kv('Business Name', E(d.business_name || d.full_name || '—'))}
               ${kv('Business Type', E(d.business_type || '—'))}
               ${kv('Industry', E(d.industry || '—'))}
               ${kv('Business Age', `${d.business_age_months ?? '—'} months`)}
               ${kv('Location', E(d.location || '—'))}
-              ${kv('Monthly Revenue', KredtUI.currency(fin.monthly_revenue, app.currency))}
-              ${kv('Monthly Expenses', KredtUI.currency(fin.monthly_expenses, app.currency))}
-              ${kv('Existing Monthly Debt Payment', KredtUI.currency(fin.existing_monthly_debt_payment, app.currency))}
-              ${kv('Total Outstanding Debt', KredtUI.currency(fin.total_outstanding_debt, app.currency))}
+              ${kv('Monthly Revenue', KredtUI.currency(fin.monthly_revenue ?? fin.monthly_salary_income ?? 0, currency))}
+              ${kv('Additional Income', KredtUI.currency(fin.additional_income || 0, currency))}
+              ${kv('Monthly Expenses', KredtUI.currency(fin.monthly_expenses ?? fin.monthly_living_expenses ?? 0, currency))}
+              ${kv('Monthly Debt Obligations', KredtUI.currency(fin.existing_monthly_debt_payment ?? fin.existing_loan_obligations ?? 0, currency))}
+              ${kv('Total Debt', KredtUI.currency(fin.total_outstanding_debt ?? fin.total_debt ?? 0, currency))}
             ` : `
               ${kv('Full Name', E(d.full_name || '—'))}
+              ${kv('Age', d.age ? `${d.age} yrs` : '—')}
+              ${kv('Gender', E(d.gender || '—'))}
+              ${kv('Marital Status', E(d.marital_status || '—'))}
               ${kv('Employment Status', E(d.employment_status || '—'))}
-              ${kv('Monthly Income', KredtUI.currency(d.monthly_income, app.currency))}
-              ${kv('Monthly Expenses', KredtUI.currency(d.monthly_expenses, app.currency))}
+              ${kv('Tenure', d.employment_duration_months != null ? `${d.employment_duration_months} months` : '—')}
+              ${kv('Education', E(d.education_level || '—'))}
+              ${kv('Housing', E(d.housing_type || '—'))}
+              ${kv('Location', E(d.location || '—'))}
+              ${kv('Monthly Salary', KredtUI.currency(fin.monthly_salary_income ?? d.monthly_income ?? 0, currency))}
+              ${kv('Additional Income', KredtUI.currency(fin.additional_income || 0, currency))}
+              ${kv('Monthly Living Expenses', KredtUI.currency(fin.monthly_living_expenses ?? d.monthly_expenses ?? 0, currency))}
+              ${kv('Loan Obligations', KredtUI.currency(fin.existing_loan_obligations ?? 0, currency))}
+              ${kv('Total Debt', KredtUI.currency(fin.total_debt ?? 0, currency))}
             `}
           </div>
         </div>
@@ -326,11 +341,10 @@
       submitBtn.innerHTML = `<span class="btn-spinner"></span> Submitting...`;
       try {
         await KredtApi.applications.submit(appId);
-        // Straight to Tracking — there is no separate confirmation screen.
         window.location.href = `detail.html?id=${appId}`;
       } catch (err) {
         console.error(err);
-        KredtUI.toast("Couldn't submit your application.", 'error');
+        KredtUI.toast("Could not submit your application.", 'error');
         checkbox.disabled = false;
         submitBtn.disabled = !checkbox.checked;
         submitBtn.textContent = 'Submit Application';
@@ -341,9 +355,6 @@
   // ============================================================
   // TRACKING (submitted and beyond)
   // ============================================================
-
-  // What the borrower reads for each backend status. Internal investigation
-  // stages, risk, policy and report detail are deliberately never shown here.
   const STATE_PANELS = {
     submitted: { title: 'Application Submitted', text: 'Your application has been received and is waiting for review.' },
     under_review: { title: 'Under Review', text: 'Your application is currently being reviewed by our credit team.' },
@@ -353,7 +364,6 @@
     decided: { title: 'Decision Made', text: 'Your application has reached a final decision.', tone: 'success' },
   };
 
-  // Index of the timeline step the application is currently on.
   const CURRENT_STEP = { submitted: 0, under_review: 1, additional_info_requested: 1, investigation_in_progress: 2, investigation_complete: 3, decided: 4 };
 
   function timelineHTML(app, decision) {
@@ -378,14 +388,14 @@
   }
 
   function infoRequestHTML(app) {
-    const req = app.info_request || {};   // shape not in the API contract yet — rendered only if present
+    const req = app.info_request || {};
     const items = Array.isArray(req.items) ? req.items : [];
     return `
       <div class="info-request-panel" id="info-request-panel" hidden>
         ${items.length ? `
           <div class="kv-label" style="margin-bottom:8px;">Please provide</div>
           <ul class="info-request-list">${items.map((i) => `<li>${E(i)}</li>`).join('')}</ul>` : `
-          <p style="font-size:14px; margin:0;">Our team will share exactly what is needed shortly. You don't need to do anything yet.</p>`}
+          <p style="font-size:14px; margin:0;">Our team will share exactly what is needed shortly. You do not need to do anything yet.</p>`}
         ${req.deadline ? `<div style="margin-top:12px; font-size:13.5px;"><span class="kv-label">Deadline</span><br><strong>${KredtUI.formatDate(req.deadline)}</strong></div>` : ''}
       </div>`;
   }
@@ -405,13 +415,28 @@
 
   function renderTracking(app, decision) {
     const isBusiness = app.loan_type === 'business';
-    const d = app.applicant_details || {};
-    const fin = d.financials || {};
+    const d = app.applicant || app.applicant_details || {};
+    const fin = app.financials || d.financials || {};
+    const currency = app.loan?.currency || app.currency || 'NGN';
+    const amount = requestedAmount(app);
+    const tenor = loanTenor(app);
+
     const rows = isBusiness
-      ? [['Business name', d.business_name], ['Business type', d.business_type], ['Industry', d.industry], ['Location', d.location],
-         ['Monthly revenue', fin.monthly_revenue != null ? KredtUI.currency(fin.monthly_revenue, app.currency) : null]]
-      : [['Full name', d.full_name], ['Employment', d.employment_status],
-         ['Monthly income', d.monthly_income != null ? KredtUI.currency(d.monthly_income, app.currency) : null]];
+      ? [
+          ['Business name', d.business_name || d.full_name],
+          ['Business type', d.business_type],
+          ['Industry', d.industry],
+          ['Location', d.location],
+          ['Monthly revenue', (fin.monthly_revenue ?? fin.monthly_salary_income) != null ? KredtUI.currency(fin.monthly_revenue ?? fin.monthly_salary_income, currency) : null]
+        ]
+      : [
+          ['Full name', d.full_name],
+          ['Age / Gender', d.age ? `${d.age} yrs • ${d.gender || '—'}` : null],
+          ['Employment', d.employment_status],
+          ['Education / Housing', d.education_level ? `${d.education_level} • ${d.housing_type || '—'}` : null],
+          ['Location', d.location],
+          ['Monthly salary', (fin.monthly_salary_income ?? d.monthly_income) != null ? KredtUI.currency(fin.monthly_salary_income ?? d.monthly_income, currency) : null]
+        ];
 
     root.innerHTML = `
       ${app.is_demo ? `<div class="demo-banner demo-banner-inset">FICTIONAL DEMO DATA</div>` : ''}
@@ -420,7 +445,7 @@
         <div class="page-header-row" style="margin-top:8px;">
           <div>
             <h1>Application #${E(app.reference)}</h1>
-            <p>${loanTypeTitle(app)} • ${KredtUI.currency(app.requested_amount, app.currency)}</p>
+            <p>${loanTypeTitle(app)} • ${KredtUI.currency(amount, currency)} (${tenor} mos)</p>
           </div>
           ${KredtUI.statusBadge(app.status, 'borrower')}
         </div>
@@ -437,13 +462,14 @@
           <h3 style="margin-bottom:16px;">Application summary</h3>
           <div class="kv-grid" style="grid-template-columns:1fr 1fr;">
             <div class="kv-item"><div class="kv-label">Loan Type</div><div class="kv-value">${loanTypeTitle(app)}</div></div>
-            <div class="kv-item"><div class="kv-label">Requested Amount</div><div class="kv-value">${KredtUI.currency(app.requested_amount, app.currency)}</div></div>
+            <div class="kv-item"><div class="kv-label">Requested Amount</div><div class="kv-value">${KredtUI.currency(amount, currency)}</div></div>
+            <div class="kv-item"><div class="kv-label">Tenor</div><div class="kv-value">${tenor} months</div></div>
             <div class="kv-item"><div class="kv-label">Submitted</div><div class="kv-value">${KredtUI.formatDate(app.submitted_at)}</div></div>
             <div class="kv-item"><div class="kv-label">Status</div><div class="kv-value">${KredtUI.statusLabel(app.status, 'borrower')}</div></div>
           </div>
           <hr class="divider">
           <div class="kv-label" style="margin-bottom:6px;">Purpose</div>
-          <div style="font-size:14px; color:var(--color-text-muted);">${E(app.purpose || '—')}</div>
+          <div style="font-size:14px; color:var(--color-text-muted);">${E(loanPurpose(app) || '—')}</div>
         </div>
       </div>
 
@@ -484,7 +510,6 @@
 
       if (app.status === 'draft') {
         const step = params.get('step');
-        // Step 1 lives on its own screen; steps 2-3 need a complete Step 1.
         if ((step !== 'documents' && step !== 'review') || !isStep1Complete(app)) {
           window.location.replace(`new.html?id=${appId}`);
           return;
@@ -497,9 +522,6 @@
       lastStatus = app.status;
       renderTracking(app, await loadDecision(app));
 
-      // Keep Tracking current as the status advances in the background.
-      // Only re-render when the status actually changes (no flicker, and an
-      // open "View Request" panel isn't collapsed under the borrower).
       if (app.status !== 'decided') {
         trackingPollTimer = setInterval(async () => {
           try {
@@ -508,12 +530,12 @@
             lastStatus = latest.status;
             renderTracking(latest, await loadDecision(latest));
             if (latest.status === 'decided') { clearInterval(trackingPollTimer); trackingPollTimer = null; }
-          } catch (e) { /* keep showing the last good state */ }
+          } catch (e) { /* keep showing last good state */ }
         }, 4000);
       }
     } catch (err) {
       if (!err.expected) console.error(err); else console.warn(err.message);
-      root.innerHTML = KredtUI.errorState({ title: 'Unable to load application', message: "We couldn't load this application." });
+      root.innerHTML = KredtUI.errorState({ title: 'Unable to load application', message: "We could not load this application." });
       document.getElementById('state-retry-btn')?.addEventListener('click', init);
     }
   }
