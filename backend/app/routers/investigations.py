@@ -146,3 +146,13 @@ def get_investigation_result(application_id: str, db: Session = Depends(get_db))
         )
 
     return inv.result_payload
+
+@router.get("/by-id/{investigation_id}", response_model=InvestigationResponse)
+def get_investigation_by_job_id(investigation_id: str, db: Session = Depends(get_db)):
+    """Allows lookup directly via investigation_id (INV-xxxxxx)."""
+    inv = db.query(InvestigationModel).filter(InvestigationModel.investigation_id == investigation_id).first()
+    if not inv:
+        raise HTTPException(status_code=404, detail="Investigation not found")
+    if inv.status != JobStatusEnum.COMPLETED.value or not inv.result_payload:
+        raise HTTPException(status_code=400, detail="Investigation not completed yet")
+    return inv.result_payload
