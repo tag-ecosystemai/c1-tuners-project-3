@@ -16,7 +16,7 @@
 // No login/register screens are wired up yet (deferred per product
 // decision) — see api.js for where auth calls will slot in later.
 
-window.KREDT_API_BASE = window.KREDT_API_BASE || 'http://localhost:8000/api/v1';
+window.KREDT_API_BASE = window.KREDT_API_BASE || 'https://kredt-backend-api.agreeabletree-ad7aebd5.westus2.azurecontainerapps.io/api/v1';
 window.KREDT_USE_MOCK = false;
 // window.KREDT_USE_MOCK = window.KREDT_USE_MOCK !== undefined ? window.KREDT_USE_MOCK : true;
 
