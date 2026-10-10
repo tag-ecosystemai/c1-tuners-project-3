@@ -1,8 +1,10 @@
+.git
+.github
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
 venv/
 .venv/
-__pycache__/
-*.pyc
-.git/
-.env
-frontend/node_modules/
-frontend/dist/
