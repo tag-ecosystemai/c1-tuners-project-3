@@ -353,7 +353,12 @@
         employment_duration_months: numVal('f-employment-duration'),
         education_level: val('f-education-level') || 'BSc',
         housing_type: val('f-housing-type') || 'Renting',
-        location: val('f-location') || 'Lagos'
+        location: val('f-location') || 'Lagos',
+        family_members: 1,
+        income_type: val('f-employment') === 'Self-employed' ? 'Commercial' : 'Working',
+        occupation: val('f-employment') || 'Employed',
+        owns_car: false,
+        owns_property: val('f-housing-type') === 'Own Home'
       };
 
       financialsPayload = {
