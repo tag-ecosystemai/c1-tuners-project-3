@@ -322,7 +322,19 @@
         business_type: val('f-business-type'),
         industry: val('f-industry'),
         business_age_months: numVal('f-age'),
-        location: val('f-location')
+        location: val('f-location') || 'Lagos',
+        age: numVal('f-age') || 35,
+        gender: 'Unspecified',
+        marital_status: 'Single',
+        employment_status: 'Self-employed',
+        employment_duration_months: numVal('f-age') || 24,
+        education_level: 'BSc',
+        housing_type: 'Renting',
+        family_members: 1,
+        income_type: 'Commercial',
+        occupation: val('f-industry') || 'Business Owner',
+        owns_car: false,
+        owns_property: false
       };
 
       financialsPayload = {
